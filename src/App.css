@@ -1,38 +1,73 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  margin: 0;
+  padding: 0;
 }
 
 .App-header {
-  background-color: #282c34;
+  background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84);
   min-height: 100vh;
+  padding: 4vh 0.5%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: calc(10px + 1vmin);
+  color: rgb(210, 210, 210);
+}
+
+.attacks-data {
+  margin: 0 2%;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+.attacks-data thead {
+  position: sticky;
+}
+
+.attacks-data th {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(0);
+  padding: 10px;
+  text-transform: uppercase;
+}
+
+.attacks-data td {
+  border-bottom: 3px solid rgba(0, 0, 0, 0.5);
+  padding: 10px 15px;
+  border: 0 2px solid black;
+}
+
+.attacks-data .name {
+  width: 10%;
+}
+
+.attacks-data .desc {
+  width: 35%;
+}
+
+.attacks-data .detection {
+  width: 25%;
+}
+
+.attacks-data .platforms {
+  width: 8%;
+}
+
+.attacks-data .phase {
+  width: 10%;
+}
+
+.attacks-data .id {
+  width: 12%;
 }
 
 .App-link {
   color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
