@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify'; // Sanitize HTML tags
+import { SearchBar } from './components/SearchBar';
 
 function App() {
   const [data, setData] = useState([]);
@@ -22,8 +23,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <SearchBar/>
         <table className="attacks-data">
-          <thead>
+          <thead id="theadd">
             <tr>
               <th className="name">Name</th>
               <th className="desc">Description</th>

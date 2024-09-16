@@ -1,0 +1,28 @@
+.search-bar-container {
+    width: 30rem;
+    height: 2rem;
+    padding: 10px 20px;
+    background: white;
+    display: flex;
+    align-items: center;
+    border-radius: 16px;
+    box-shadow: 0 0 5px #333;
+}
+
+.search-bar-container input {
+    width: 100%;
+    padding-left: 20px;
+    font-size: 1.5rem;
+    color: #1e1e1e;
+    border: none;
+    background: none;
+}
+
+.search-bar-container input:focus {
+    outline: none;
+}
+
+#search-icon {
+    color: #333;
+    font-size: 2rem;
+}
