@@ -1,0 +1,52 @@
+/* All positional values are in vh, to stay as static as possible when zooming in & out*/
+.bot-container {
+    width: 9vh;
+    height: 9vh;
+    position: fixed;
+    right: 2%;
+    bottom: 2vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #000000CC, #202020CC);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border-radius: 3vh;
+    border-top-left-radius: 0; /* Gives a drop effect */
+    border: 0.5vh solid #101010CC;
+    box-shadow: 0 0 3vh 0 rgba(0, 0, 0, 0.8);
+    transition: box-shadow 0.2s ease-out;
+    transition: width 0.4s ease-in-out, height 0.4s ease-in-out;
+    cursor: pointer;
+}
+
+/* Enlarge the shadow spread radious on hover*/
+.bot-container:hover {
+    box-shadow: 0 0 3vh 0.6vh rgba(0, 0, 0, 0.8);
+}
+
+/* Toggle class onClick */
+.bot-container.maximized {
+    width: 24rem;
+    height: 36rem;
+    background: linear-gradient(135deg, #000000DD, #202020DD);
+    display: block;
+}
+
+.bot-container #robot-icon {
+    font-size: 5vh;
+    color: #DDDDDD;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.bot-container h1 {
+    display: block;
+    font-size: 2vh;
+    top: 5vh;
+}
+
+.invisible {
+    display: none;
+    opacity: 0;
+}
