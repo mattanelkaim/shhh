@@ -88,9 +88,3 @@
 .attacks-data tr:last-child td {
   border-bottom: none;
 }
-
-code {
-  padding: 0 4px;
-  background: rgba(31, 31, 31, 0.65);
-  border-radius: 6px;
-}
