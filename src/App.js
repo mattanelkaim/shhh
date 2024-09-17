@@ -5,6 +5,7 @@ import { SearchBar } from './components/SearchBar';
 
 function App() {
   const [data, setData] = useState([]);
+  const filterUseState = [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
     const fetchData = async() => {
@@ -23,7 +24,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <SearchBar/>
+        <SearchBar data={data} filter={filterUseState}/>
         <table className="attacks-data">
           <thead id="theadd">
             <tr>
@@ -36,7 +37,7 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
+            {filterUseState[0].map((item) => (
               <tr key={item.id}>
                 <td>{item.name}</td>
                 <td dangerouslySetInnerHTML={{__html: sanitize(shorten(item.description))}}></td>
