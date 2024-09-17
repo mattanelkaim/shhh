@@ -2,6 +2,7 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify'; // Sanitize HTML tags
 import { SearchBar } from './components/SearchBar';
+import { ChatBot } from './components/ChatBot';
 
 function App() {
   const [data, setData] = useState([]);
@@ -53,6 +54,7 @@ function App() {
             ))}
           </tbody>
         </table>
+        <ChatBot/>
       </header>
     </div>
   );
