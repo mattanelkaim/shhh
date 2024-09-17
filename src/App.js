@@ -5,26 +5,31 @@ import { SearchBar } from './components/SearchBar';
 
 function App() {
   const [data, setData] = useState([]);
-  const filterUseState = [filtered, setFiltered] = useState([]);
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
-    const fetchData = async() => {
+    const fetchData = async () => {
       try {
-          const response = await fetch('http://localhost:3001/api/data');
-          const data = await response.json();
-          setData(data);
+        // Fetch & save data from server endpoint once
+        const response = await fetch('http://localhost:3001/api/data');
+        const data = await response.json();
+        setData(data);
+
+        // Make sure to initialize ONLY in the first render & after data has been fetched
+        if (results.length === 0)
+          setResults(data);
+        
       } catch (error) {
-          console.error(error);
+        console.error(error);
       }
     };
-
     fetchData();
   }, []);
   
   return (
     <div className="App">
       <header className="App-header">
-        <SearchBar data={data} filter={filterUseState}/>
+        <SearchBar data={data} setResults={setResults}/>
         <table className="attacks-data">
           <thead id="theadd">
             <tr>
@@ -37,7 +42,7 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {filterUseState[0].map((item) => (
+            {results.map((item) => (
               <tr key={item.id}>
                 <td>{item.name}</td>
                 <td dangerouslySetInnerHTML={{__html: sanitize(shorten(item.description))}}></td>
