@@ -7,6 +7,7 @@ function App() {
   const [data, setData] = useState([]);
   const [results, setResults] = useState([]);
 
+  // Fetch should be async, run in the background
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -15,15 +16,13 @@ function App() {
         const data = await response.json();
         setData(data);
 
-        // Make sure to initialize ONLY in the first render & after data has been fetched
-        if (results.length === 0)
-          setResults(data);
-        
+        // Will be assigned ONLY in the first render & after data has been fetched
+        setResults(data);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchData();
+    fetchData(); // Then call the lambda
   }, []);
   
   return (
@@ -42,7 +41,7 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {results.map((item) => (
+            {results.map((item) => ( // Will replicate template for each element
               <tr key={item.id}>
                 <td>{item.name}</td>
                 <td dangerouslySetInnerHTML={{__html: sanitize(shorten(item.description))}}></td>
@@ -73,7 +72,7 @@ function shorten(desc) {
   return desc.slice(0, position) + "...";
 }
 
-// Process the HTML tags in the recieves raw data
+// Process the HTML tags in the recieved raw data
 function sanitize(html) {
   return DOMPurify.sanitize(html, {ALLOWED_TAGS: ['br', 'code']});
 }
