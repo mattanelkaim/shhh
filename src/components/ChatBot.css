@@ -15,8 +15,7 @@
     border-top-left-radius: 0; /* Gives a drop effect */
     border: 0.5vh solid #101010CC;
     box-shadow: 0 0 3vh 0 rgba(0, 0, 0, 0.8);
-    transition: box-shadow 0.2s ease-out;
-    transition: width 0.4s ease-in-out, height 0.4s ease-in-out;
+    transition: box-shadow 0.2s ease-out, width 0.4s ease-out, height 0.4s ease-out;
     cursor: pointer;
 }
 
@@ -27,8 +26,8 @@
 
 /* Toggle class onClick */
 .bot-container.maximized {
-    width: 24rem;
-    height: 36rem;
+    width: 58vh;
+    height: 80vh;
     background: linear-gradient(135deg, #000000DD, #202020DD);
     display: block;
 }
@@ -38,6 +37,10 @@
     color: #DDDDDD;
     opacity: 1;
     transition: opacity 0.2s ease-in-out;
+    display: none;
+}
+
+.bot-container .chat-container {
 }
 
 .bot-container h1 {
@@ -46,7 +49,24 @@
     top: 5vh;
 }
 
+.visible {
+    opacity: 1;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+    transition-property: all;
+    transition-delay: 0.6s;
+}
+
 .invisible {
+    opacity: 0.5;
+    transition-property: display;
+    transition-delay: 0.2s;
+}
+
+.displayed {
+    display: block;
+}
+
+.not-displayed {
     display: none;
-    opacity: 0;
 }

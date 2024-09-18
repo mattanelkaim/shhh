@@ -12,8 +12,8 @@ export const ChatBot = () => {
 
     return (
       <div className={`bot-container ${isMaximized ? 'maximized' : ''}`} onClick={handleClick}>
-        <RiRobot2Line id="robot-icon" display={isMaximized ? 'none' : 'block'}/>
-        <div className={`chat-container ${isMaximized ? '' : 'invisible'}`}>
+        <RiRobot2Line id="robot-icon" display={isMaximized ? 'none' : 'none'}/>
+        <div className={`chat-container ${isMaximized ? 'visible' : 'invisible'}`}>
           <FaArrowLeft/>
           <h1>Speaking to Ninja 🥷</h1>
         </div>
