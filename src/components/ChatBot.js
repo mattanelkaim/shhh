@@ -21,9 +21,8 @@ export const ChatBot = () => {
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([]); // List of [{bot/user}, {message}]
 
-  const handleUserMessageInput = (e) => {
-    if (e.key !== 'Enter' || !messageInput) // Ignore empty
-      return;
+  const handleMsgInput = () => {
+    if (!messageInput) return; // Skip if empty
 
     // Store user message
     const newUserMessage = ['user', messageInput];
@@ -44,9 +43,11 @@ export const ChatBot = () => {
         <h1>Chat with NinjaBot 🥷</h1>
         <div className="chat">
           {messages.map((message, index) => (
-            // Determine message type based on first element (user/bot)
+            /* Determine message type based on first element (user/bot).
+               Also content wrapped in <p> to solve a bug where double clicking
+               on last word will select first word of next message as well */
             <div key={index} className={`message ${(message[0] == "user" ? 'user-message' : 'bot-message')}`}>
-              {message[1]}
+              <p>{message[1]}</p>
             </div>
           ))}
         </div>
@@ -54,10 +55,10 @@ export const ChatBot = () => {
           <input
             placeholder="Type your message here..."
             value={messageInput}
-            onKeyDown={handleUserMessageInput}
+            onKeyDown={(e) => {if (e.key === 'Enter') handleMsgInput()}}
             onChange={(e) => setMessageInput(e.target.value)}/>
           <div className="send">
-            <BsFillSendFill/>
+            <BsFillSendFill id="send-btn" onClick={handleMsgInput}/>
           </div>
         </div>
       </div>
