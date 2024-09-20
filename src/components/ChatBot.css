@@ -123,10 +123,18 @@
 }
 
 .bot-container .chat-container .input-container .send {
-    padding: 1.5vh 1.5vh 1vh 1vh;
+    padding: 0.7vh 1.5vh 0.2vh 1vh;
     font-size: 2.2vh;
+    box-sizing: content-box;
 }
 
 .bot-container .chat-container .input-container .send #send-btn {
+    padding: 0.8vh;
+    border-radius: 30vh;
+    transition: background 0.3s ease-in-out;
+    /*
+    When toggled (in JS):
+    background: #0F1313;
     cursor: pointer;
+    */
 }

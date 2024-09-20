@@ -21,6 +21,21 @@ export const ChatBot = () => {
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([]); // List of [{bot/user}, {message}]
 
+  const handleInputChange = (e) => {
+    // Use trinary so that func can be called with an empty string as well
+    const input = e ? e.target.value : '';
+    setMessageInput(input);
+
+    const sendBtn = document.querySelector('#send-btn');
+    if (input) {
+      sendBtn.style.background = '#0F1313';
+      sendBtn.style.cursor = 'pointer';
+    } else {
+      sendBtn.style.background = 'none';
+      sendBtn.style.cursor = 'auto';
+    }
+  }
+
   const handleMsgInput = () => {
     if (!messageInput) return; // Skip if empty
 
@@ -33,6 +48,7 @@ export const ChatBot = () => {
     
     // Clear user input
     setMessageInput('');
+    handleInputChange(''); // To reset send button
   }
 
   return (
@@ -46,7 +62,7 @@ export const ChatBot = () => {
             /* Determine message type based on first element (user/bot).
                Also content wrapped in <p> to solve a bug where double clicking
                on last word will select first word of next message as well */
-            <div key={index} className={`message ${(message[0] == "user" ? 'user-message' : 'bot-message')}`}>
+            <div key={index} className={`message ${(message[0] === "user" ? 'user-message' : 'bot-message')}`}>
               <p>{message[1]}</p>
             </div>
           ))}
@@ -55,8 +71,8 @@ export const ChatBot = () => {
           <input
             placeholder="Type your message here..."
             value={messageInput}
-            onKeyDown={(e) => {if (e.key === 'Enter') handleMsgInput()}}
-            onChange={(e) => setMessageInput(e.target.value)}/>
+            onChange={handleInputChange}
+            onKeyDown={(e) => {if (e.key === 'Enter') handleMsgInput()}}/>
           <div className="send">
             <BsFillSendFill id="send-btn" onClick={handleMsgInput}/>
           </div>
