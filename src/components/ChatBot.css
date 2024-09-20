@@ -61,7 +61,7 @@
 }
 
 .bot-container .chat-container .chat {
-    width: 80%;
+    width: 75%;
     padding: 2vh;
     flex-grow: 1; /* Take the rest of the height in .chat-container */
 }
@@ -75,14 +75,17 @@
     word-wrap: break-word;
     font-weight: 500;
     border-radius: 1.2vh;
-    font-size: 1.8vh;
+    font-size: 2vh;
+}
+
+.bot-container .chat-container .chat .message p {
+    margin: 0;
 }
 
 .bot-container .chat-container .chat .user-message {
-    background: #5AD7FF;
-    color: #151515;
+    background: #4db8dc;
+    color: #080808;
     float: right;
-    clear: left;
     border-top-right-radius: 0.3vh;
 }
 
@@ -122,4 +125,8 @@
 .bot-container .chat-container .input-container .send {
     padding: 1.5vh 1.5vh 1vh 1vh;
     font-size: 2.2vh;
+}
+
+.bot-container .chat-container .input-container .send #send-btn {
+    cursor: pointer;
 }
