@@ -25,7 +25,7 @@
 
 /* Toggle class onClick */
 .bot-container.maximized {
-    width: 58vh;
+    width: 60vh;
     height: 80vh;
     background: linear-gradient(135deg, #000000DD, #202020DD);
     display: block;
@@ -39,6 +39,7 @@
 }
 
 .bot-container .chat-container {
+    height: 80vh; /* Same as .bot-container.maximized */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -47,8 +48,8 @@
 
 .bot-container .chat-container #arrow-icon {
     position: absolute;
-    left: 1.5vh;
-    top: 1.5vh;
+    left: 1.8vh;
+    top: 1.8vh;
     font-size: 3vh;
     cursor: pointer;
 }
@@ -57,14 +58,38 @@
     display: block;
     margin: 2vh 0;
     font-size: 2vh;
-    top: 5vh;
-    height: 5vh;
-    background: yellow;
 }
 
 .bot-container .chat-container .chat {
-    flex-grow: 1;
-    background: teal;
+    width: 80%;
+    padding: 2vh;
+    flex-grow: 1; /* Take the rest of the height in .chat-container */
+}
+
+.bot-container .chat-container .chat .message {
+    width: fit-content;
+    max-width: 35vh;
+    padding: 0.6vh 1.2vh 1vh;
+    margin-bottom: 1.5vh;
+    clear: both; /* Combined with float, makes sure only 1 msg per row */
+    word-wrap: break-word;
+    font-weight: 500;
+    border-radius: 1.2vh;
+    font-size: 1.8vh;
+}
+
+.bot-container .chat-container .chat .user-message {
+    background: #5AD7FF;
+    color: #151515;
+    float: right;
+    clear: left;
+    border-top-right-radius: 0.3vh;
+}
+
+.bot-container .chat-container .chat .bot-message {
+    background: #222729;
+    float: left;
+    border-top-left-radius: 0.3vh;
 }
 
 .bot-container .chat-container .input-container {
