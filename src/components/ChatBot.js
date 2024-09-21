@@ -18,8 +18,9 @@ export const ChatBot = () => {
   };
 
   /* Messages handling */
+  const initialBotMsg = "Hi there, I'm NinjaBot👋<br/>hi";
   const [messageInput, setMessageInput] = useState('');
-  const [messages, setMessages] = useState([]); // List of [{bot/user}, {message}]
+  const [messages, setMessages] = useState([['bot', initialBotMsg]]); // List of [{bot/user}, {message}]
 
   const handleInputChange = (e) => {
     // Use trinary so that func can be called with an empty string as well
@@ -43,12 +44,21 @@ export const ChatBot = () => {
     const newUserMessage = ['user', messageInput];
     setMessages((prevMessages) => [...prevMessages, newUserMessage]);
 
-    const newBotMessage = ['bot', getBotResponse(messageInput)]
-    setMessages((prevMessages) => [...prevMessages, newBotMessage]);
+    getBotResponse(messageInput)
+    .then(response => {
+      const newBotMessage = ['bot', response['response'] ];
+      setMessages((prevMessages) => [...prevMessages, newBotMessage]);
+    });
     
     // Clear user input
     setMessageInput('');
     handleInputChange(''); // To reset send button
+
+    // Scroll to bottom after the slightest delay, to allow for messages to re-render first
+    const chat = document.querySelector('.chat');
+    setTimeout(() => {
+      chat.scrollTop = chat.scrollHeight;
+    }, 1); // 1ms
   }
 
   return (
@@ -63,7 +73,12 @@ export const ChatBot = () => {
                Also content wrapped in <p> to solve a bug where double clicking
                on last word will select first word of next message as well */
             <div key={index} className={`message ${(message[0] === "user" ? 'user-message' : 'bot-message')}`}>
-              <p>{message[1]}</p>
+              {message[0] === 'bot' ? (
+                // Allows text formatting only for bot for security reasons
+                <p dangerouslySetInnerHTML={{__html: message[1]}}></p>
+              ) : (
+                <p>{message[1]}</p>
+              )}
             </div>
           ))}
         </div>
@@ -107,6 +122,12 @@ function handleVisibilityChange(isMaximized) {
   }
 }
 
-function getBotResponse(userInput) {
-  return "I gotchu";
+async function getBotResponse(userQuery) {
+  try {
+    const response = await fetch('http://localhost:3001/api/chatbot?query=' + userQuery);
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return "Sorry, an error has occurred.<br/>Check console for more details."
+  }
 }

@@ -61,9 +61,26 @@
 }
 
 .bot-container .chat-container .chat {
-    width: 75%;
-    padding: 2vh;
+    width: 100%;
+    padding: 2vh 6vh 2vh 8.5vh;
     flex-grow: 1; /* Take the rest of the height in .chat-container */
+    overflow-y: auto; /* To show scrollbar only when needed */
+    scroll-behavior: smooth;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.chat::-webkit-scrollbar {
+    width: 1.5vh;
+}
+
+.chat::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 1vh #444444CC;
+    border-radius: 1vh;
+}
+
+.chat::-webkit-scrollbar-thumb {
+    background: #919191;
+    border-radius: 1vh;
 }
 
 .bot-container .chat-container .chat .message {
@@ -125,7 +142,6 @@
 .bot-container .chat-container .input-container .send {
     padding: 0.7vh 1.5vh 0.2vh 1vh;
     font-size: 2.2vh;
-    box-sizing: content-box;
 }
 
 .bot-container .chat-container .input-container .send #send-btn {
