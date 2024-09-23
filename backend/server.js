@@ -1,5 +1,9 @@
+/* VirusTotal */
+
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
+const axios = require('axios'); // Used in chatBotProcessing.js
+const chatBotAPI = require('./chatBotProcessing.js');
 const app = express();
 const port = 3001;
 
@@ -33,33 +37,10 @@ app.get('/api/chatbot', (req, res) => {
         return;
     }
 
-    query = query.toLowerCase();
-
-    const wordsToOmit = ['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'so', 'yet', 'in',
-        'of', 'to', 'into', 'on', 'at', 'by', 'with', 'from', 'up', 'down', 'out', 'off', 'over',
-        'under', 'again', 'further', 'then', 'once', 'i', 'me', 'my', 'mine', 'we', 'us', 'our',
-        'ours', 'you', 'your', 'yours', 'he', 'him', 'his', 'she', 'her', 'hers', 'it', 'its',
-        'they', 'them', 'their', 'theirs', 'what', 'which', 'who', 'whom', 'whose', 'be', 'am',
-        'is', 'are', 'was', 'were', 'being', 'been', 'have', 'has', 'had', 'doing', 'done', 'will',
-        'would', 'shall', 'should', 'can', 'could', 'may', 'might', 'must', 'ought'];
-
-    for (const word of wordsToOmit) {
-        // Wrapping with '\b' ensures only whole words are replaced
-        query = query.replace(new RegExp(`\\b${word}\\b`, 'g'), '');
-    }
-
-    console.log("Checking: '" + query + '\'')
-    const md5Match = query.match('check\\s+md5\\s+([a-fA-F0-9]{32})');
-    console.log(md5Match);
-    if (md5Match) {
-        res.json({'response': "Found match: " + md5Match[1]});
-    } else {
-        res.json({'response': "Invalid md5 request syntax"});
-    }
-
+    res.json(chatBotAPI.processQuery(query));
 });
 
 // Listen from incoming requests from frontend
 app.listen(port, () => {
-    console.log('Server listening on port ' + port + '...');
+    console.log(`Server listening on port ${port}...`);
 });
