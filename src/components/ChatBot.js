@@ -58,7 +58,7 @@ export const ChatBot = () => {
     const chat = document.querySelector('.chat');
     setTimeout(() => {
       chat.scrollTop = chat.scrollHeight;
-    }, 1); // 1ms
+    }, 5); // 1ms
   }
 
   return (
