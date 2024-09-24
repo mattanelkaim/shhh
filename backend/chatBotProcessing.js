@@ -1,4 +1,4 @@
-const VirusTotalAPIKey = 'YOUR_VIRUSTOTAL_API_KEY'; // Replace with your actual API key
+const VirusTotalAPIKey = '';
 const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'so', 'yet', 'in',
     'of', 'to', 'into', 'on', 'at', 'by', 'with', 'from', 'up', 'down', 'out', 'off', 'over',
     'under', 'again', 'further', 'then', 'once', 'i', 'me', 'my', 'mine', 'we', 'us', 'our',
@@ -8,9 +8,10 @@ const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor',
     'would', 'shall', 'should', 'can', 'could', 'may', 'might', 'must', 'ought']);
 
 
-export function processQuery(query) {
+export async function processQuery(query) {
     query = query.toLowerCase();
 
+    // Omit common words from query
     for (const word of wordsToOmit) {
         // Wrapping with '\b' ensures only whole words are deleted
         query = query.replace(new RegExp(`\\b${word}\\b`, 'g'), '');
@@ -18,33 +19,39 @@ export function processQuery(query) {
 
     const md5Match = query.match('check\\s+md5\\s+([a-fA-F0-9]{32})');
     if (md5Match) {
-        isMD5SignatureMalicious(md5Match[1])
-        .then(result => {
-            return {'response': result};
-        });
+        return {'response': await analyzeMD5Signature(md5Match[1])};
     } else {
-        return {'response': "Invalid md5 request syntax"};
+        return {'response': "Invalid MD5 request syntax."};
     }
 }
 
-async function isMD5SignatureMalicious(hash) {
+async function analyzeMD5Signature(hash) {
     try {
-        const response = await axios.get(`https://www.virustotal.com/api/v3/files/${md5}`, {
-          headers: {
-            'x-apikey': VirusTotalAPIKey
-          }
+        const response = await fetch(`https://www.virustotal.com/api/v3/files/${hash}`, {
+            method: 'get',
+            headers: new Headers({
+              'x-apikey': VirusTotalAPIKey
+            })
         });
+        
+        // Handle edge cases
+        if (response.status === 404)
+            return "MD5 signature is unknown to VirusTotal."
+        if (response.status !== 200)
+            return "There seems to be an issue with the VirusTotal API."
+        
+        // Extract relevant data
+        const data = await response.text();
+        const stats = JSON.parse(data)['data']['attributes']['last_analysis_stats'];
     
-        const data = response.data;
-    
-        if (data.attributes.last_analysis_stats.malicious > 0) {
-          console.log(`${md5} is known as malicious.`);
-          return true;
+        // possible stats: 'malicious', 'suspicious', 'undetected', 'harmless', 'timeout', 'confirmed-timeout', 'failure', 'type-unsupported'
+        if (stats['malicious'] + stats['suspicious'] > 0) {
+            return "This MD5 signature was <b>flagged as malicious</b> in VirusTotal's DB!";
         } else {
-          console.log(`${md5} is not known as malicious.`);
-          return false;
+            return "This MD5 signature <b>does not</b> seem to be malicious, according to the VirusTotal's DB.";
         }
       } catch (error) {
-        console.error('Error checking MD5:', error);
+            console.error("Error checking MD5: ", error);
+            return "There seems to be an error on our end. Please try again later.";
       }
 }
