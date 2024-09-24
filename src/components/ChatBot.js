@@ -125,7 +125,9 @@ function handleVisibilityChange(isMaximized) {
 async function getBotResponse(userQuery) {
   try {
     const response = await fetch('http://localhost:3001/api/chatbot?query=' + userQuery);
-    return await response.json();
+    const text = await response.text();
+    console.log(text);
+    return JSON.parse(text);
   } catch (error) {
     console.error(error);
     return "Sorry, an error has occurred.<br/>Check console for more details."
