@@ -22,9 +22,7 @@ export const ChatBot = () => {
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([['bot', initialBotMsg]]); // List of [{bot/user}, {message}]
 
-  const handleInputChange = (e) => {
-    // Use trinary so that func can be called with an empty string as well
-    const input = e ? e.target.value : '';
+  const handleInputChange = (input) => {
     setMessageInput(input);
 
     const sendBtn = document.querySelector('#send-btn');
@@ -35,7 +33,7 @@ export const ChatBot = () => {
       sendBtn.style.background = 'none';
       sendBtn.style.cursor = 'auto';
     }
-  }
+  };
 
   const handleMsgInput = () => {
     if (!messageInput) return; // Skip if empty
@@ -59,7 +57,28 @@ export const ChatBot = () => {
     setTimeout(() => {
       chat.scrollTop = chat.scrollHeight;
     }, 5); // 1ms
-  }
+  };
+
+  // const addToInput = () => {
+  //   const input = document.querySelector('.input-container input');
+  //   console.log('click: ' + messageInput);
+  //   //setMessageInput(input.value + 'hi');
+  //   const newMessageInput = messageInput.length + 'hi';
+  //   setMessageInput(newMessageInput);
+  // };
+
+  // /* Code blocks click */
+  // const codeBlocksRef = document.querySelector('.chat');
+  // useEffect(() => {
+  //   // Skip if null or if not a bot message
+  //   if (!codeBlocksRef?.lastChild?.classList.contains('bot-message'))
+  //     return;
+
+  //   const codeBlocks = Array.from(codeBlocksRef.lastChild.querySelectorAll('code'));
+  //   codeBlocks.forEach((codeBlock) => {
+  //     codeBlock.addEventListener('click', addToInput);
+  //   });
+  // }, [messages.length]); // Each time a message is added
 
   return (
     <div className={`bot-container ${isMaximized ? 'maximized' : ''}`} onClick={handleMaximizeClick}>
@@ -86,7 +105,7 @@ export const ChatBot = () => {
           <input
             placeholder="Type your message here..."
             value={messageInput}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange(e.target.value)}
             onKeyDown={(e) => {if (e.key === 'Enter') handleMsgInput()}}/>
           <div className="send">
             <BsFillSendFill id="send-btn" onClick={handleMsgInput}/>
@@ -94,7 +113,7 @@ export const ChatBot = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function handleVisibilityChange(isMaximized) {
@@ -126,7 +145,6 @@ async function getBotResponse(userQuery) {
   try {
     const response = await fetch('http://localhost:3001/api/chatbot?query=' + userQuery);
     const text = await response.text();
-    console.log(text);
     return JSON.parse(text);
   } catch (error) {
     console.error(error);

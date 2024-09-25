@@ -99,6 +99,12 @@
     margin: 0;
 }
 
+.bot-container .chat-container .chat .message code {
+    background: #1A1A1A;
+    font-weight: 600;
+    /* cursor: pointer; */
+}
+
 .bot-container .chat-container .chat .user-message {
     background: #4db8dc;
     color: #080808;
