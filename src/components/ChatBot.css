@@ -86,7 +86,7 @@
 .bot-container .chat-container .chat .message {
     width: fit-content;
     max-width: 35vh;
-    padding: 0.6vh 1.2vh 1vh;
+    padding: 0.8vh 1.2vh 1.2vh;
     margin-bottom: 1.5vh;
     clear: both; /* Combined with float, makes sure only 1 msg per row */
     word-wrap: break-word;
@@ -105,9 +105,15 @@
     /* cursor: pointer; */
 }
 
-/* Shorten the padding to save space */
+/* Save space to fit better in message box */
 .bot-container .chat-container .chat .message ul {
+    margin: 0.4vh 0;
     padding-left: 2.5vh;
+}
+
+/* To help with responses like help */
+.bot-container .chat-container .chat .message ul li:not(:last-child) {
+    margin-bottom: 0.25vh;
 }
 
 .bot-container .chat-container .chat .user-message {

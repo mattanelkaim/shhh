@@ -1,7 +1,7 @@
-import { CgNpm } from 'react-icons/cg';
 import sqlite3 from 'sqlite3';
 
 const VirusTotalAPIKey = '';
+
 const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'so', 'yet', 'in',
     'of', 'to', 'into', 'on', 'at', 'by', 'with', 'from', 'up', 'down', 'out', 'off', 'over',
     'under', 'again', 'further', 'then', 'once', 'i', 'me', 'my', 'mine', 'we', 'us', 'our',
@@ -9,6 +9,12 @@ const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor',
     'they', 'them', 'their', 'theirs', 'what', 'which', 'who', 'whom', 'whose', 'be', 'am',
     'is', 'are', 'was', 'were', 'being', 'been', 'have', 'has', 'had', 'doing', 'done', 'will',
     'would', 'shall', 'should', 'can', 'could', 'may', 'might', 'must', 'ought']);
+
+// Using &lt; (<) and &gt; (>) to escape dangerouslySetInnerHTML 
+const commands = "Available commands:<ul>\
+    <li><code>Check MD5 &lt;your signature&gt;</code></li>\
+    <li><code>Analyze {platforms | phases}</code></li>\
+    <li><code>How many attacks [with n {platforms | phases}]</code></li></ul>";
 
 // Use constants instead of hardcoding
 const DB_NAMES = {
@@ -22,6 +28,7 @@ const DB_NAMES = {
     phases: 'phase_name',
 };
 
+
 export default async function processQuery(query, db) {
     query = query.toLowerCase();
 
@@ -30,12 +37,15 @@ export default async function processQuery(query, db) {
         // Wrapping with '\b' ensures only whole words are deleted
         query = query.replace(new RegExp(`\\b${word}\\b`, 'g'), '');
     }
+    
+    if (query === 'help')
+        return {'response': commands};
 
-    if (query.startsWith('how many')) {
+    if (query.startsWith('how many ')) {
         query = query.replace(/^how many /g, ''); // Remove only first match
         return {'response': await getAttacksDataDB(query, db)};
     }
-    if (query.startsWith('analyze')) {
+    if (query.startsWith('analyze ')) {
         query = query.replace(/^analyze /g, ''); // Remove only first match
         return {'response': await analyzeAttacksDB(query, db)};
     }
