@@ -18,9 +18,10 @@ export const ChatBot = () => {
   };
 
   /* Messages handling */
-  const initialBotMsg = "Hi there, I'm NinjaBot👋<br/>hi";
+  const initialMsg = "Hi there, I'm NinjaBot👋<br/>You can ask me questions about the displayed data, or even validate MD5 signatures.\
+                      Type <code>help</code> to learn more.<br/>I'll do my best to help you!";
   const [messageInput, setMessageInput] = useState('');
-  const [messages, setMessages] = useState([['bot', initialBotMsg]]); // List of [{bot/user}, {message}]
+  const [messages, setMessages] = useState([['bot', initialMsg]]); // List of [{bot/user}, {message}]
 
   const handleInputChange = (input) => {
     setMessageInput(input);
@@ -52,11 +53,11 @@ export const ChatBot = () => {
     setMessageInput('');
     handleInputChange(''); // To reset send button
 
-    // Scroll to bottom after the slightest delay, to allow for messages to re-render first
+    // Scroll to bottom after a slight delay, to allow for messages to re-render first
     const chat = document.querySelector('.chat');
     setTimeout(() => {
       chat.scrollTop = chat.scrollHeight;
-    }, 5); // 1ms
+    }, 10); // 10ms
   };
 
   // const addToInput = () => {
