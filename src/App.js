@@ -1,8 +1,8 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify'; // Sanitize HTML tags
-import { SearchBar } from './components/SearchBar';
-import { ChatBot } from './components/ChatBot';
+import { SearchBar } from './components/SearchBar.js';
+import { ChatBot } from './components/ChatBot.js';
 
 function App() {
   const [data, setData] = useState([]);
