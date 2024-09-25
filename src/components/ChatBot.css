@@ -105,6 +105,11 @@
     /* cursor: pointer; */
 }
 
+/* Shorten the padding to save space */
+.bot-container .chat-container .chat .message ul {
+    padding-left: 2.5vh;
+}
+
 .bot-container .chat-container .chat .user-message {
     background: #4db8dc;
     color: #080808;

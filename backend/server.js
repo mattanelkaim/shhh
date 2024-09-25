@@ -13,7 +13,7 @@ app.use((req, res, next) => {
 });
 
 // Open the database
-const db = new sqlite3.Database('backend/attacks_data.db');
+const db = new sqlite3.Database('backend/attacks_data.db', sqlite3.OPEN_READONLY);
 
 // Define an API endpoint to handle database operations
 app.get('/api/data', (req, res) => {

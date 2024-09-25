@@ -1,3 +1,4 @@
+import { CgNpm } from 'react-icons/cg';
 import sqlite3 from 'sqlite3';
 
 const VirusTotalAPIKey = '';
@@ -8,6 +9,18 @@ const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor',
     'they', 'them', 'their', 'theirs', 'what', 'which', 'who', 'whom', 'whose', 'be', 'am',
     'is', 'are', 'was', 'were', 'being', 'been', 'have', 'has', 'had', 'doing', 'done', 'will',
     'would', 'shall', 'should', 'can', 'could', 'may', 'might', 'must', 'ought']);
+
+// Use constants instead of hardcoding
+const DB_NAMES = {
+    attacksTable: 'attacks',
+    // Columns
+    attackID: 'id',
+    attackName: 'name',
+    description: 'description',
+    platforms: 'platforms',
+    detection: 'detection',
+    phases: 'phase_name',
+};
 
 export default async function processQuery(query, db) {
     query = query.toLowerCase();
@@ -20,19 +33,16 @@ export default async function processQuery(query, db) {
 
     if (query.startsWith('how many')) {
         query = query.replace(/^how many /g, ''); // Remove only first match
-        return {'response': queryDB(query, db)};
+        return {'response': await getAttacksDataDB(query, db)};
     }
-        
-
+    if (query.startsWith('analyze')) {
+        query = query.replace(/^analyze /g, ''); // Remove only first match
+        return {'response': await analyzeAttacksDB(query, db)};
+    }
     if (query.match('check\\s+md5\\s+([a-fA-F0-9]{32})'))
         return {'response': await analyzeMD5Signature(md5Match[1])};
     
     return {'response': "I'm not sure I understand. Type <code>help</code> to see the supported commands."};
-}
-
-function queryDB(query, db) {
-    if (query === attacks)
-    return query.length;
 }
 
 async function analyzeMD5Signature(hash) {
@@ -64,4 +74,64 @@ async function analyzeMD5Signature(hash) {
             console.error("Error checking MD5: ", error);
             return "There seems to be an error on our end. Please try again later.";
       }
+}
+
+// Convenience function
+async function queryDB(sqlQuery, db) {
+    // Resolve the promise later with await
+    return new Promise((resolve, reject) => {
+        db.all(sqlQuery, (err, rows) => {
+            if (err)
+                reject('N/A');
+            else
+                resolve(rows);
+        });
+    });
+}
+
+async function getAttacksDataDB(input, db) {
+    let sql;
+
+    if (input === 'attacks')
+        sql = `SELECT COUNT(*) AS count FROM ${DB_NAMES['attacksTable']}`;
+    else
+        return 'Not supported';
+
+    const data = await queryDB(sql, db);
+    
+    return `Found a total of ${data[0].count} attacks.`;
+}
+
+async function analyzeAttacksDB(input, db) {
+    if (input !== 'platforms' && input !== 'phases')
+        return 'Not supported';
+
+    // Get data from DB
+    const column = DB_NAMES[input];
+    const sql = `SELECT ${column} FROM ${DB_NAMES['attacksTable']}`;
+    const data = await queryDB(sql, db);
+
+    // Analyze the data
+    let frequencies = {};
+    data.forEach((item) => {
+        const platforms = item[column].split(', ');
+        platforms.forEach((platform) => {
+            // Increase OR start from 1 if doesn't exist yet
+            frequencies[platform] = (frequencies[platform] || 0) + 1;
+        });
+    });
+
+    // Sort the frequencies in a descending order
+    const sorted = Object.entries(frequencies) // Break to an array of pairs
+      .sort((a, b) => b[1] - a[1]) // b - a to sort descending
+      .reduce((item, [name, count]) => ({ ...item, [name]: count }), {}); // Re-construct the dict
+
+    // Join all data to 1 ul for a nice presentation
+    const total = Object.values(sorted).reduce((sum, value) => sum + value, 0);
+    const itemsArr = Object.entries(sorted).map(([name, count]) => {
+        const percentage = (count * 100 / total).toFixed(2); // Show 2 decimal places
+        return `<li><u>${name}</u>: <b>${count}</b> (${percentage}%)</li>`;
+    });
+
+    return `<ul>${itemsArr.join('')}</ul>`;
 }
