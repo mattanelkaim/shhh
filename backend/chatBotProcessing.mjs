@@ -1,3 +1,5 @@
+import sqlite3 from 'sqlite3';
+
 const VirusTotalAPIKey = '';
 const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'so', 'yet', 'in',
     'of', 'to', 'into', 'on', 'at', 'by', 'with', 'from', 'up', 'down', 'out', 'off', 'over',
@@ -7,8 +9,7 @@ const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor',
     'is', 'are', 'was', 'were', 'being', 'been', 'have', 'has', 'had', 'doing', 'done', 'will',
     'would', 'shall', 'should', 'can', 'could', 'may', 'might', 'must', 'ought']);
 
-
-export async function processQuery(query) {
+export default async function processQuery(query, db) {
     query = query.toLowerCase();
 
     // Omit common words from query
@@ -17,12 +18,21 @@ export async function processQuery(query) {
         query = query.replace(new RegExp(`\\b${word}\\b`, 'g'), '');
     }
 
-    const md5Match = query.match('check\\s+md5\\s+([a-fA-F0-9]{32})');
-    if (md5Match) {
-        return {'response': await analyzeMD5Signature(md5Match[1])};
-    } else {
-        return {'response': "Invalid MD5 request syntax."};
+    if (query.startsWith('how many')) {
+        query = query.replace(/^how many /g, ''); // Remove only first match
+        return {'response': queryDB(query, db)};
     }
+        
+
+    if (query.match('check\\s+md5\\s+([a-fA-F0-9]{32})'))
+        return {'response': await analyzeMD5Signature(md5Match[1])};
+    
+    return {'response': "I'm not sure I understand. Type <code>help</code> to see the supported commands."};
+}
+
+function queryDB(query, db) {
+    if (query === attacks)
+    return query.length;
 }
 
 async function analyzeMD5Signature(hash) {

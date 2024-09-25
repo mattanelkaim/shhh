@@ -1,8 +1,8 @@
 /* VirusTotal */
 
-const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
-const botAPI = require('./chatBotProcessing.js');
+import express from 'express';
+import sqlite3 from 'sqlite3';
+import processQuery from './chatBotProcessing.mjs';
 const app = express();
 const port = 3001;
 
@@ -36,7 +36,7 @@ app.get('/api/chatbot', (req, res) => {
         return;
     }
 
-    botAPI.processQuery(query).then(answer => {
+    processQuery(query, db).then(answer => {
         res.send(answer);
     })
 });
