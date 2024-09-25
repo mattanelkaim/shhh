@@ -41,12 +41,12 @@ export default async function processQuery(query, db) {
     if (query === 'help')
         return {'response': commands};
 
-    if (query.startsWith('how many ')) {
-        query = query.replace(/^how many /g, ''); // Remove only first match
+    if (query.startsWith('how many attacks')) {
+        query = query.replace(/^how many attacks/, ''); // Remove only first match
         return {'response': await getAttacksDataDB(query, db)};
     }
     if (query.startsWith('analyze ')) {
-        query = query.replace(/^analyze /g, ''); // Remove only first match
+        query = query.replace(/^analyze /, ''); // Remove only first match
         return {'response': await analyzeAttacksDB(query, db)};
     }
     if (query.match('check\\s+md5\\s+([a-fA-F0-9]{32})'))
