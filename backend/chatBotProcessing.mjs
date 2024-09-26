@@ -12,7 +12,7 @@ const commandFormats = {
     // Using &lt; (<) and &gt; (>) to escape dangerouslySetInnerHTML 
     'checkMD5': 'Check MD5 &lt;your signature&gt;',
     'analyze': 'Analyze {platforms | phases}',
-    'getAttacks': 'How many attacks [with n {platforms | phases}]',
+    'getAttacks': 'How many attacks [with &lt;int&gt; {platforms | phases}]',
 }
 
 // Join all commands in a nice list format
@@ -104,6 +104,11 @@ async function queryDB(sqlQuery, db) {
     });
 }
 
+// Use a function instead of hardcoding every time
+function invalidUsage(properUsage) {
+    return `Invalid usage. Format:<br/><code>${properUsage}</code>`
+}
+
 function isInt(str) {
     const parsedInt = parseInt(str);
     // If float, then second condition wont be met
@@ -120,12 +125,12 @@ async function getAttacksDataDB(input, db) {
     const args = input.split(' ');
     // Make sure it's in the format "with <int> {platform|phase}[s]"
     if (args.length !== 3 || args[0] !== 'with' || !isInt(args[1]) || !args[2].match('^(platform|phase)s?$'))
-        return 'Not supported';
+        return invalidUsage(commandFormats['getAttacks']);
 
     const num = parseInt(args[1]);
     // Handle edge-case
     if (num < 0)
-        return 'Not supported';
+        return `How can there be a negative amount of ${args[2]}?`;
         
     // startsWith instead of direct comparison to take optional 's' into account
     const column = (args[2].startsWith('phase') ? DB_NAMES['phases'] : DB_NAMES['platforms']);
@@ -148,7 +153,7 @@ async function getAttacksDataDB(input, db) {
 
 async function analyzeAttacksDB(input, db) {
     if (input !== 'platforms' && input !== 'phases')
-        return 'Not supported';
+        return invalidUsage(commandFormats['analyze'])
 
     // Get data from DB
     const column = DB_NAMES[input];
