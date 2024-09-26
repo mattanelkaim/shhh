@@ -1,24 +1,29 @@
-import sqlite3 from 'sqlite3';
-
 const VirusTotalAPIKey = '';
 
 const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'so', 'yet', 'in',
-    'of', 'to', 'into', 'on', 'at', 'by', 'with', 'from', 'up', 'down', 'out', 'off', 'over',
+    'of', 'to', 'into', 'on', 'at', 'by', 'up', 'down', 'out', 'off', 'over',
     'under', 'again', 'further', 'then', 'once', 'i', 'me', 'my', 'mine', 'we', 'us', 'our',
     'ours', 'you', 'your', 'yours', 'he', 'him', 'his', 'she', 'her', 'hers', 'it', 'its',
     'they', 'them', 'their', 'theirs', 'what', 'which', 'who', 'whom', 'whose', 'be', 'am',
     'is', 'are', 'was', 'were', 'being', 'been', 'have', 'has', 'had', 'doing', 'done', 'will',
     'would', 'shall', 'should', 'can', 'could', 'may', 'might', 'must', 'ought']);
 
-// Using &lt; (<) and &gt; (>) to escape dangerouslySetInnerHTML 
-const commands = "Available commands:<ul>\
-    <li><code>Check MD5 &lt;your signature&gt;</code></li>\
-    <li><code>Analyze {platforms | phases}</code></li>\
-    <li><code>How many attacks [with n {platforms | phases}]</code></li></ul>";
+const commandFormats = {
+    // Using &lt; (<) and &gt; (>) to escape dangerouslySetInnerHTML 
+    'checkMD5': 'Check MD5 &lt;your signature&gt;',
+    'analyze': 'Analyze {platforms | phases}',
+    'getAttacks': 'How many attacks [with n {platforms | phases}]',
+}
+
+// Join all commands in a nice list format
+const commands = `Available commands:<ul>\
+    ${Object.entries(commandFormats).map(([name, format]) => {
+        return `<li><code>${format}</code></li>`;
+    }).join('')}</ul>`;
 
 // Use constants instead of hardcoding
 const DB_NAMES = {
-    attacksTable: 'attacks',
+    table: 'attacks',
     // Columns
     attackID: 'id',
     attackName: 'name',
@@ -30,7 +35,7 @@ const DB_NAMES = {
 
 
 export default async function processQuery(query, db) {
-    query = query.toLowerCase();
+    query = query.toLowerCase().trim();
 
     // Omit common words from query
     for (const word of wordsToOmit) {
@@ -42,14 +47,14 @@ export default async function processQuery(query, db) {
         return {'response': commands};
 
     if (query.startsWith('how many attacks')) {
-        query = query.replace(/^how many attacks/, ''); // Remove only first match
+        query = query.replace(/^how many attacks/, '').trim(); // Remove only first match
         return {'response': await getAttacksDataDB(query, db)};
     }
     if (query.startsWith('analyze ')) {
         query = query.replace(/^analyze /, ''); // Remove only first match
         return {'response': await analyzeAttacksDB(query, db)};
     }
-    if (query.match('check\\s+md5\\s+([a-fA-F0-9]{32})'))
+    if (query.match('^check\\s+md5\\s+([a-fA-F0-9]{32})$'))
         return {'response': await analyzeMD5Signature(md5Match[1])};
     
     return {'response': "I'm not sure I understand. Type <code>help</code> to see the supported commands."};
@@ -99,17 +104,46 @@ async function queryDB(sqlQuery, db) {
     });
 }
 
-async function getAttacksDataDB(input, db) {
-    let sql;
+function isInt(str) {
+    const parsedInt = parseInt(str);
+    // If float, then second condition wont be met
+    return !isNaN(parsedInt) && parsedInt.toString() === str;
+}
 
-    if (input === 'attacks')
-        sql = `SELECT COUNT(*) AS count FROM ${DB_NAMES['attacksTable']}`;
-    else
+async function getAttacksDataDB(input, db) {
+    if (input === '') {
+        const sql = `SELECT COUNT(*) AS count FROM ${DB_NAMES['table']}`;
+        const data = await queryDB(sql, db);
+        return `Found a total of ${data[0].count} attacks.`;
+    }
+
+    const args = input.split(' ');
+    // Make sure it's in the format "with <int> {platform|phase}[s]"
+    if (args.length !== 3 || args[0] !== 'with' || !isInt(args[1]) || !args[2].match('^(platform|phase)s?$'))
         return 'Not supported';
 
+    const num = parseInt(args[1]);
+    // Handle edge-case
+    if (num < 0)
+        return 'Not supported';
+        
+    // startsWith instead of direct comparison to take optional 's' into account
+    const column = (args[2].startsWith('phase') ? DB_NAMES['phases'] : DB_NAMES['platforms']);
+
+    // Could use trinary but it's unreadable. And IIFE isn't worth it here
+    let condition;
+    if (num === 0) {
+        condition = `LENGTH(${column}) = 0`;
+    }
+    else {
+        // Use (num-1) ',' delimiters to count in each row
+        condition = `LENGTH(${column}) - LENGTH(REPLACE(${column}, ',', '')) = ${num - 1};`;
+    }
+
+    const sql = `SELECT COUNT(*) AS count FROM ${DB_NAMES['table']} WHERE ${condition}`;
+
     const data = await queryDB(sql, db);
-    
-    return `Found a total of ${data[0].count} attacks.`;
+    return `Found ${data[0].count} attacks with ${num} ${args[2]}.`;
 }
 
 async function analyzeAttacksDB(input, db) {
@@ -118,7 +152,7 @@ async function analyzeAttacksDB(input, db) {
 
     // Get data from DB
     const column = DB_NAMES[input];
-    const sql = `SELECT ${column} FROM ${DB_NAMES['attacksTable']}`;
+    const sql = `SELECT ${column} FROM ${DB_NAMES['table']}`;
     const data = await queryDB(sql, db);
 
     // Analyze the data
