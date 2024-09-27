@@ -1,0 +1,35 @@
+.hint-wrapper {
+    display: inline-block;
+    position: relative;
+}
+
+#icon {
+    margin-left: 0.2vw;
+    color: #444444;
+    text-align: center;
+    font-size: calc(9px + 1.5vmin);
+    vertical-align: -0.5vmin; /* Fix a slight annoying misalignment*/
+}
+
+.tooltip {
+    width: 9vw;
+    padding: 0.5vh 0.8vw;
+    opacity: 0;
+    background: #444444CC;
+    color: #D2D2D2;
+    text-align: center;
+    font-size: calc(9px + 0.5vmin);
+    border-radius: 6px;
+    
+    position: absolute;
+    z-index: 2;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, -0.2vh);
+
+    transition: opacity 0.15s ease-out;
+}
+
+.hint-wrapper:hover .tooltip {
+    opacity: 1;
+}

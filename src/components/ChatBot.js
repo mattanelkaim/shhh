@@ -107,7 +107,8 @@ export const ChatBot = () => {
             placeholder="Type your message here..."
             value={messageInput}
             onChange={(e) => handleInputChange(e.target.value)}
-            onKeyDown={(e) => {if (e.key === 'Enter') handleMsgInput()}}/>
+            onKeyDown={(e) => {if (e.key === 'Enter') handleMsgInput()}}
+          />
           <div className="send">
             <BsFillSendFill id="send-btn" onClick={handleMsgInput}/>
           </div>

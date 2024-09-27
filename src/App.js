@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify'; // Sanitize HTML tags
 import { SearchBar } from './components/SearchBar.js';
 import { ChatBot } from './components/ChatBot.js';
+import { Hint } from './components/Hint.js';
 
 function App() {
   const [data, setData] = useState([]);
@@ -25,6 +26,16 @@ function App() {
     };
     fetchData(); // Then call the lambda
   }, []);
+
+  const [expandedRows, setExpandedRows] = useState({}); // Object to store expanded row indices
+
+  const handleRowClick = (id) => {
+    setExpandedRows((prevExpandedRows) => ({
+      ...prevExpandedRows,
+      [id]: !prevExpandedRows[id], // Toggle expanded state for clicked row
+    }));
+    console.log(expandedRows)
+  };
   
   return (
     <div className="App">
@@ -34,8 +45,8 @@ function App() {
           <thead id="theadd">
             <tr>
               <th className="name">Name</th>
-              <th className="desc">Description</th>
-              <th className="detection">Detection</th>
+              <th className="desc">Description<Hint/></th>
+              <th className="detection">Detection<Hint/></th>
               <th className="platforms">Platforms</th>
               <th className="phase">Phase</th>
               <th className="id">Unique ID</th>
@@ -43,10 +54,10 @@ function App() {
           </thead>
           <tbody>
             {results.map((item) => ( // Will replicate template for each element
-              <tr key={item.id}>
+              <tr key={item.id} onClick={() => handleRowClick(item.id)}>
                 <td>{item.name}</td>
-                <td dangerouslySetInnerHTML={{__html: sanitize(shorten(item.description))}}></td>
-                <td dangerouslySetInnerHTML={{__html: sanitize(shorten(item.detection))}}></td>
+                <td dangerouslySetInnerHTML={{__html: sanitize(expandedRows[item.id] ? item.description : shorten(item.description))}}></td>
+                <td dangerouslySetInnerHTML={{__html: sanitize(expandedRows[item.id] ? item.detection : shorten(item.detection))}}></td>
                 <td>{item.platforms}</td>
                 <td>{item.phase_name}</td>
                 <td>{item.id}</td>
