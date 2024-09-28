@@ -18,7 +18,7 @@
 .attacks-data {
   width: 96%;
   margin-top: 2rem;
-  background: linear-gradient(to right, #000000AA, #11111188);
+  background: linear-gradient(to right, #040404A0, #111111A0);
   filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.5));
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
@@ -42,8 +42,8 @@
 
 .attacks-data td {
   padding: 10px 15px;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+  border-right: 1px solid #3A3A3AE0;
+  border-bottom: 2px solid #0000007F;
   transition: background 0.2s ease-out;
   word-wrap: break-word;
 }
