@@ -6,7 +6,8 @@ const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor',
     'ours', 'you', 'your', 'yours', 'he', 'him', 'his', 'she', 'her', 'hers', 'it', 'its',
     'they', 'them', 'their', 'theirs', 'what', 'which', 'who', 'whom', 'whose', 'be', 'am',
     'is', 'are', 'was', 'were', 'being', 'been', 'have', 'has', 'had', 'doing', 'done', 'will',
-    'would', 'shall', 'should', 'can', 'could', 'may', 'might', 'must', 'ought']);
+    'would', 'shall', 'should', 'can', 'could', 'may', 'might', 'must', 'ought'
+]);
 
 const commandFormats = {
     // Using &lt; (<) and &gt; (>) to escape dangerouslySetInnerHTML 
