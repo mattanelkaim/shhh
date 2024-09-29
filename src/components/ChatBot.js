@@ -5,7 +5,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { BsFillSendFill } from "react-icons/bs";
 
 export const ChatBot = () => {
-  const [isMaximized, setIsMaximized] = useState(true);
+  const [isMaximized, setIsMaximized] = useState(false);
 
   // Call this function whenever isMaximized is changed
   useEffect(() => {
