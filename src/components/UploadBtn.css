@@ -1,0 +1,8 @@
+.upload {
+    padding: 0.7vh 0.7vh 0.2vh;
+    font-size: 2.8vh;
+}
+
+.upload #upload-btn {
+    cursor: pointer;
+}

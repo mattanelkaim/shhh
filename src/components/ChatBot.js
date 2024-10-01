@@ -1,5 +1,6 @@
 import "./ChatBot.css"
 import React, { useState, useEffect } from 'react';
+import { UploadBtn } from "./UploadBtn.js";
 import { RiRobot2Line } from "react-icons/ri";
 import { FaArrowLeft } from "react-icons/fa6";
 import { BsFillSendFill } from "react-icons/bs";
@@ -109,6 +110,7 @@ export const ChatBot = () => {
             onChange={(e) => handleInputChange(e.target.value)}
             onKeyDown={(e) => {if (e.key === 'Enter') handleMsgInput()}}
           />
+          <UploadBtn/>
           <div className="send">
             <BsFillSendFill id="send-btn" onClick={handleMsgInput}/>
           </div>
