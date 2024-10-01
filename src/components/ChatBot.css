@@ -156,8 +156,10 @@
     outline: none;
 }
 
+
+
 .bot-container .chat-container .input-container .send {
-    padding: 0.7vh 1.5vh 0.2vh 1vh;
+    padding: 0.7vh 1vh 0.2vh;
     font-size: 2.2vh;
 }
 
