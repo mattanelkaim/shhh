@@ -1,9 +1,9 @@
-import "./SearchBar.css"
-import { FaSearch } from "react-icons/fa";
+import './SearchBar.css'
+import { FaSearch } from 'react-icons/fa';
 
 function filterData(data, query) {
   // Handle edge case (display all when empty)
-  if (query === "")
+  if (!query)
     return data
 
   // Return all elements that contain the query (case insensitive)
@@ -12,10 +12,10 @@ function filterData(data, query) {
 
 export const SearchBar = ({data, setResults}) => {
   return (
-    <div className='search-bar-container'>
+    <div className="search-bar-container">
       <FaSearch id="search-icon"/>
       <input
-        type='text'
+        type="text"
         placeholder="Search descriptions..."
         // Refresh results on each input change, using a filter function
         onChange={(e) => setResults(filterData(data, e.target.value))}

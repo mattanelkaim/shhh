@@ -1,7 +1,7 @@
-import "./UploadBtn.css"
+import './UploadBtn.css'
 import React, { useState } from 'react';
 import axios from 'axios';
-import { FaFileUpload } from "react-icons/fa";
+import { FaFileUpload } from 'react-icons/fa';
 
 export const UploadBtn = () => {
     const [loading, setLoading] = useState(false); // Used for styling

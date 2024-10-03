@@ -1,9 +1,9 @@
-import "./ChatBot.css"
+import './ChatBot.css'
 import React, { useState, useEffect } from 'react';
-import { UploadBtn } from "./UploadBtn.js";
-import { RiRobot2Line } from "react-icons/ri";
-import { FaArrowLeft } from "react-icons/fa6";
-import { BsFillSendFill } from "react-icons/bs";
+import { UploadBtn } from './UploadBtn.js';
+import { RiRobot2Line } from 'react-icons/ri';
+import { FaArrowLeft } from 'react-icons/fa6';
+import { BsFillSendFill } from 'react-icons/bs';
 
 export const ChatBot = () => {
   const [isMaximized, setIsMaximized] = useState(false);
@@ -85,7 +85,7 @@ export const ChatBot = () => {
   return (
     <div className={`bot-container ${isMaximized ? 'maximized' : ''}`} onClick={handleMaximizeClick}>
       <RiRobot2Line id="robot-icon" display={isMaximized ? 'none' : 'block'}/>
-      <div className='chat-container'>
+      <div className="chat-container">
         <FaArrowLeft id="arrow-icon" onClick={() => setIsMaximized(false)}/>
         <h1>Chat with NinjaBot 🥷</h1>
         <div className="chat">
@@ -93,7 +93,7 @@ export const ChatBot = () => {
             /* Determine message type based on first element (user/bot).
                Also content wrapped in <p> to solve a bug where double clicking
                on last word will select first word of next message as well */
-            <div key={index} className={`message ${(message[0] === "user" ? 'user-message' : 'bot-message')}`}>
+            <div key={index} className={`message ${(message[0] === 'user' ? 'user-message' : 'bot-message')}`}>
               {message[0] === 'bot' ? (
                 // Allows text formatting only for bot for security reasons
                 <p dangerouslySetInnerHTML={{__html: message[1]}}></p>
@@ -147,11 +147,11 @@ function handleVisibilityChange(isMaximized) {
 
 async function getBotResponse(userQuery) {
   try {
-    const response = await fetch('http://localhost:3001/api/chatbot?query=' + userQuery);
+    const response = await fetch(`http://localhost:3001/api/chatbot?query=${userQuery}`);
     const text = await response.text();
     return JSON.parse(text);
   } catch (error) {
     console.error(error);
-    return "Sorry, an error has occurred.<br/>Check console for more details."
+    return 'Sorry, an error has occurred.<br/>Check console for more details.'
   }
 }
