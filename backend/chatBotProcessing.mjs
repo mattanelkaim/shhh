@@ -1,3 +1,6 @@
+import axios from 'axios';
+import FormData from 'form-data'; // To allow constructor with 3 arguments
+
 const VirusTotalAPIKey = '';
 
 const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'so', 'yet', 'in',
@@ -11,9 +14,9 @@ const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor',
 
 const commandFormats = {
     // Using &lt; (<) and &gt; (>) to escape dangerouslySetInnerHTML 
-    'checkMD5': 'Check MD5 &lt;your signature&gt;',
-    'analyze': 'Analyze {platforms | phases}',
-    'getAttacks': 'How many attacks [with &lt;int&gt; {platforms | phases}]',
+    checkMD5: 'Check MD5 &lt;your signature&gt;',
+    analyze: 'Analyze {platforms | phases}',
+    getAttacks: 'How many attacks [with &lt;int&gt; {platforms | phases}]',
 }
 
 // Join all commands in a nice list format
@@ -35,7 +38,7 @@ const DB_NAMES = {
 };
 
 
-export default async function processQuery(query, db) {
+export async function processQuery(query, db) {
     query = query.toLowerCase().trim();
 
     // Omit common words from query
@@ -184,4 +187,52 @@ async function analyzeAttacksDB(input, db) {
     });
 
     return `<ul>${itemsArr.join('')}</ul>`;
+}
+
+
+
+export async function analyzeFile(file) {
+    try {
+        // Conver the file (type=Express.Multer.File) to a formData format to send it
+        const formData = new FormData();
+        formData.append('file', Buffer.from(file.buffer) , file.originalname);
+
+        // Send the file to the sandbox
+        console.log('SENDING.......');
+        
+        const response = await axios.post(
+            'https://www.virustotal.com/api/v3/files',
+            formData, // Send the file
+            {headers: {
+                'x-apikey': VirusTotalAPIKey,
+                'Content-Type': 'multipart/form-data',
+            }}
+        );
+
+        const reportURL = response.data.data.links.self;
+
+        // Get report results (in a JSON format)
+        const analysisResponse = await axios.get(
+            reportURL,
+            {headers: {
+                'x-apikey': VirusTotalAPIKey,
+            }}
+        );
+
+        console.log('sent successfuly');
+        
+        // Determine wheter file is malicious or not and respond to client
+        const stats = analysisResponse.data.data.attributes.stats;
+
+        // possible stats: 'malicious', 'suspicious', 'undetected', 'harmless', 'timeout', 'confirmed-timeout', 'failure', 'type-unsupported'
+        if (stats['malicious'] + stats['suspicious'] > 0) {
+            return "VirusTotal has flagged this file as <b>malicious</b>!";
+        } else {
+            return "This file <b>does not</b> seem to be malicious, according to VirusTotal.";
+        }
+    } catch (error) {
+        // Try to print a detailed error from Axios, if defined
+        console.error('ERROR: ' + error.response ?? error);
+        return {response: 'Error with VirusTotal!'};
+    }
 }
