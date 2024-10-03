@@ -4,6 +4,7 @@ import { UploadBtn } from './UploadBtn.js';
 import { RiRobot2Line } from 'react-icons/ri';
 import { FaArrowLeft } from 'react-icons/fa6';
 import { BsFillSendFill } from 'react-icons/bs';
+import ninjaIcon from '../ninja.png'
 
 export const ChatBot = () => {
   const [isMaximized, setIsMaximized] = useState(false);
@@ -19,8 +20,8 @@ export const ChatBot = () => {
   };
 
   /* Messages handling */
-  const initialMsg = "Hi there, I'm NinjaBot👋<br/>You can ask me questions about the displayed data, or even validate MD5 signatures.\
-                      Type <code>help</code> to learn more.<br/>I'll do my best to help you!";
+  const initialMsg = `Hi there, I'm NinjaBot👋<br/>You can ask me questions about the displayed data, or even validate MD5 signatures.
+                      Type <code>help</code> to learn more.<br/>I'll do my best to help you!`;
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([['bot', initialMsg]]); // List of [{bot/user}, {message}]
 
@@ -69,7 +70,7 @@ export const ChatBot = () => {
       <RiRobot2Line id="robot-icon" display={isMaximized ? 'none' : 'block'}/>
       <div className="chat-container">
         <FaArrowLeft id="arrow-icon" onClick={() => setIsMaximized(false)}/>
-        <h1>Chat with NinjaBot 🥷</h1>
+        <h1>Chat with NinjaBot <img id="ninja-icon" src={ninjaIcon} alt="icon"/></h1>
         <div className="chat">
           {messages.map((message, index) => (
             /* Determine message type based on first element (user/bot).
@@ -103,24 +104,26 @@ export const ChatBot = () => {
 }
 
 function handleVisibilityChange(isMaximized) {
-  const chat = document.querySelector('.chat-container');
+  const chat = document.querySelector('.chat');
+  const chatContainer = document.querySelector('.chat-container');
   const botContainer = document.querySelector('.bot-container');
 
   if (isMaximized) {
     // First display it although opacity is 0
-    chat.style.display = 'flex';
+    chatContainer.style.display = 'flex';
+    chat.scrollTop = chat.scrollHeight; // For somewhat reason, it opens with scroll in middle instead of bottom
 
     // Then start the transition to opacity 1 with a delay
     setTimeout(() => {
-      chat.style.opacity = 1;
+      chatContainer.style.opacity = 1;
     }, 500); // 0.5s
 
     // Also change the pointer
     botContainer.style.cursor = 'auto';
   } else {
     // Hide chat immediately
-    chat.style.display = 'none';
-    chat.style.opacity = 0;
+    chatContainer.style.display = 'none';
+    chatContainer.style.opacity = 0;
 
     // Then change the pointer
     botContainer.style.cursor = 'pointer';
