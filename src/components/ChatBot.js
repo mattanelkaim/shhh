@@ -60,7 +60,7 @@ export const ChatBot = () => {
 
     // Scroll to bottom after a slight delay, to allow for messages to re-render first
     setTimeout(() => {
-      chat.scrollTop = 2 * chat.scrollHeight;
+      chat.scrollTop = chat.scrollHeight;
     }, 70); // 70ms
   };
 

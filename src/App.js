@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify'; // Sanitize HTML tags
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { SearchBar } from './components/SearchBar.js';
 import { ChatBot } from './components/ChatBot.js';
 import { Hint } from './components/Hint.js';
@@ -40,30 +41,32 @@ function App() {
     <div className="App">
       <header className="App-header">
         <SearchBar data={data} setResults={setResults}/>
-        <table className="attacks-data">
-          <thead id="theadd">
-            <tr>
-              <th className="name">Name</th>
-              <th className="desc">Description<Hint/></th>
-              <th className="detection">Detection<Hint/></th>
-              <th className="platforms">Platforms</th>
-              <th className="phase">Phase</th>
-              <th className="id">Unique ID</th>
-            </tr>
-          </thead>
-          <tbody>
-            {results.map((item) => ( // Will replicate template for each element
-              <tr key={item.id} onClick={() => handleRowClick(item.id)}>
-                <td>{item.name}</td>
-                <td dangerouslySetInnerHTML={{__html: sanitize(expandedRows[item.id] ? item.description : shorten(item.description))}}></td>
-                <td dangerouslySetInnerHTML={{__html: sanitize(expandedRows[item.id] ? fillNA(item.detection) : shorten(item.detection))}}></td>
-                <td>{item.platforms}</td>
-                <td>{item.phase_name}</td>
-                <td>{item.id}</td>
+        <InfiniteScroll dataLength={results.length} id="scroll-container">
+          <table className="attacks-data">
+            <thead id="theadd">
+              <tr>
+                <th className="name">Name</th>
+                <th className="desc">Description<Hint/></th>
+                <th className="detection">Detection<Hint/></th>
+                <th className="platforms">Platforms</th>
+                <th className="phase">Phase</th>
+                <th className="id">Unique ID</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {results.map((item) => ( // Will replicate template for each element
+                <tr key={item.id} onClick={() => handleRowClick(item.id)}>
+                  <td>{item.name}</td>
+                  <td dangerouslySetInnerHTML={{__html: sanitize(expandedRows[item.id] ? item.description : shorten(item.description))}}></td>
+                  <td dangerouslySetInnerHTML={{__html: sanitize(expandedRows[item.id] ? fillNA(item.detection) : shorten(item.detection))}}></td>
+                  <td>{item.platforms}</td>
+                  <td>{item.phase_name}</td>
+                  <td>{item.id}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </InfiniteScroll>
         <ChatBot/>
       </header>
     </div>
