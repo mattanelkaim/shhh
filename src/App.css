@@ -1,12 +1,13 @@
 .App {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 .App-header {
   background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84);
   min-height: 100vh;
-  padding: 2rem 0.5%;
+  padding: 2rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,10 +17,9 @@
 }
 
 .attacks-data {
-  width: 96%;
-  margin-top: 2rem;
+  width: 96vw;
+  margin: 2rem 2vw 0;
   background: linear-gradient(to right, #040404A0, #111111A0);
-  filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.5));
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(0, 0, 0, 0.5);
