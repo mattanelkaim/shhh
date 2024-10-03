@@ -48,20 +48,20 @@ export async function processQuery(query, db) {
     }
     
     if (query === 'help')
-        return {'response': commands};
+        return {response: commands};
 
     if (query.startsWith('how many attacks')) {
         query = query.replace(/^how many attacks/, '').trim(); // Remove only first match
-        return {'response': await getAttacksDataDB(query, db)};
+        return {response: await getAttacksDataDB(query, db)};
     }
     if (query.startsWith('analyze ')) {
         query = query.replace(/^analyze /, ''); // Remove only first match
-        return {'response': await analyzeAttacksDB(query, db)};
+        return {response: await analyzeAttacksDB(query, db)};
     }
     if (query.match('^check\\s+md5\\s+([a-fA-F0-9]{32})$'))
-        return {'response': await analyzeMD5Signature(md5Match[1])};
+        return {response: await analyzeMD5Signature(md5Match[1])};
     
-    return {'response': "I'm not sure I understand. Type <code>help</code> to see the supported commands."};
+    return {response: "I'm not sure I understand. Type <code>help</code> to see the supported commands."};
 }
 
 async function analyzeMD5Signature(hash) {
@@ -75,9 +75,9 @@ async function analyzeMD5Signature(hash) {
         
         // Handle edge cases
         if (response.status === 404)
-            return "MD5 signature is unknown to VirusTotal."
+            return 'MD5 signature is unknown to VirusTotal.'
         if (response.status !== 200)
-            return "There seems to be an issue with the VirusTotal API."
+            return 'There seems to be an issue with the VirusTotal API.'
         
         // Extract relevant data
         const data = await response.text();
@@ -90,8 +90,8 @@ async function analyzeMD5Signature(hash) {
             return "This MD5 signature <b>does not</b> seem to be malicious, according to the VirusTotal's DB.";
         }
       } catch (error) {
-            console.error("Error checking MD5: ", error);
-            return "There seems to be an error on our end. Please try again later.";
+            console.error('Error checking MD5: ', error);
+            return 'There seems to be an error on our end. Please try again later.';
       }
 }
 
@@ -127,7 +127,7 @@ async function getAttacksDataDB(input, db) {
     }
 
     const args = input.split(' ');
-    // Make sure it's in the format "with <int> {platform|phase}[s]"
+    // Make sure it's in the format (with <int> {platform|phase}[s])
     if (args.length !== 3 || args[0] !== 'with' || !isInt(args[1]) || !args[2].match('^(platform|phase)s?$'))
         return invalidUsage(commandFormats['getAttacks']);
 
@@ -226,9 +226,9 @@ export async function analyzeFile(file) {
 
         // possible stats: 'malicious', 'suspicious', 'undetected', 'harmless', 'timeout', 'confirmed-timeout', 'failure', 'type-unsupported'
         if (stats['malicious'] + stats['suspicious'] > 0) {
-            return "VirusTotal has flagged this file as <b>malicious</b>!";
+            return 'VirusTotal has flagged this file as <b>malicious</b>!';
         } else {
-            return "This file <b>does not</b> seem to be malicious, according to VirusTotal.";
+            return 'This file <b>does not</b> seem to be malicious, according to VirusTotal.';
         }
     } catch (error) {
         // Try to print a detailed error from Axios, if defined

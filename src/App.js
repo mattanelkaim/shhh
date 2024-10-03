@@ -82,7 +82,7 @@ function shorten(desc) {
   // Make sure not to cut in the middle of a word
   const position = desc.lastIndexOf(' ');
   
-  return desc.slice(0, position) + "...";
+  return desc.slice(0, position) + '...';
 }
 
 // Process the HTML tags in the recieved raw data
