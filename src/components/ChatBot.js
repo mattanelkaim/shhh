@@ -24,6 +24,11 @@ export const ChatBot = () => {
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([['bot', initialMsg]]); // List of [{bot/user}, {message}]
 
+  const messagesAppend = (sender, message) => {
+    const newMessage = [sender, message];
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+  };
+
   const handleInputChange = (input) => {
     setMessageInput(input);
 
@@ -41,13 +46,11 @@ export const ChatBot = () => {
     if (!messageInput) return; // Skip if empty
 
     // Store user message
-    const newUserMessage = ['user', messageInput];
-    setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+    messagesAppend('user', messageInput);
 
     getBotResponse(messageInput)
     .then(response => {
-      const newBotMessage = ['bot', response['response'] ];
-      setMessages((prevMessages) => [...prevMessages, newBotMessage]);
+      messagesAppend('bot', response['response']);
     });
     
     // Clear user input
@@ -61,27 +64,6 @@ export const ChatBot = () => {
     }, 20); // 20ms
   };
 
-  // const addToInput = () => {
-  //   const input = document.querySelector('.input-container input');
-  //   console.log('click: ' + messageInput);
-  //   //setMessageInput(input.value + 'hi');
-  //   const newMessageInput = messageInput.length + 'hi';
-  //   setMessageInput(newMessageInput);
-  // };
-
-  // /* Code blocks click */
-  // const codeBlocksRef = document.querySelector('.chat');
-  // useEffect(() => {
-  //   // Skip if null or if not a bot message
-  //   if (!codeBlocksRef?.lastChild?.classList.contains('bot-message'))
-  //     return;
-
-  //   const codeBlocks = Array.from(codeBlocksRef.lastChild.querySelectorAll('code'));
-  //   codeBlocks.forEach((codeBlock) => {
-  //     codeBlock.addEventListener('click', addToInput);
-  //   });
-  // }, [messages.length]); // Each time a message is added
-
   return (
     <div className={`bot-container ${isMaximized ? 'maximized' : ''}`} onClick={handleMaximizeClick}>
       <RiRobot2Line id="robot-icon" display={isMaximized ? 'none' : 'block'}/>
@@ -94,7 +76,7 @@ export const ChatBot = () => {
                Also content wrapped in <p> to solve a bug where double clicking
                on last word will select first word of next message as well */
             <div key={index} className={`message ${(message[0] === 'user' ? 'user-message' : 'bot-message')}`}>
-              {message[0] === 'bot' ? (
+              {(message[0] === 'bot') ? (
                 // Allows text formatting only for bot for security reasons
                 <p dangerouslySetInnerHTML={{__html: message[1]}}></p>
               ) : (
@@ -110,7 +92,7 @@ export const ChatBot = () => {
             onChange={(e) => handleInputChange(e.target.value)}
             onKeyDown={(e) => {if (e.key === 'Enter') handleMsgInput()}}
           />
-          <UploadBtn/>
+          <UploadBtn messagesAppend={messagesAppend}/>
           <div className="send">
             <BsFillSendFill id="send-btn" onClick={handleMsgInput}/>
           </div>
