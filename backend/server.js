@@ -1,13 +1,17 @@
 import express from 'express';
 import sqlite3 from 'sqlite3';
+import multer from 'multer';
 import processQuery from './chatBotProcessing.mjs';
 const app = express();
 const PORT = 3001;
 
+// Used in /api/analyze endpoint
+const upload = multer({storage: multer.memoryStorage()})
+
 const CODES = {
-    'OK': 200,
-    'BAD_REQUEST': 400,
-    'SERVER_ERROR': 500,
+    OK: 200,
+    BAD_REQUEST: 400,
+    SERVER_ERROR: 500,
 };
 
 app.use((req, res, next) => {
@@ -46,9 +50,8 @@ app.get('/api/chatbot', (req, res) => {
 });
 
 // API endpoint to handle file analyzing WITHOUT SAVING THE FILE LOCALLY
-app.post('/api/analyze', (req, res) => {
+app.post('/api/analyze', upload.single('file'), (req, res) => {
     const file = req.file;
-    console.log('file=' + file);
   
     if (!file) {
       console.error('no upload');
