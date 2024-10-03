@@ -1,7 +1,7 @@
 import express from 'express';
 import sqlite3 from 'sqlite3';
 import multer from 'multer';
-import processQuery from './chatBotProcessing.mjs';
+import {processQuery, analyzeFile} from './chatBotProcessing.mjs';
 const app = express();
 const PORT = 3001;
 
@@ -40,7 +40,7 @@ app.get('/api/chatbot', (req, res) => {
     const {query} = req.query; // {} is crucial
 
     if (!query) {
-        res.json({'response': 'Error: invalid api usage!'});
+        res.json({response: 'Error: invalid api usage!'});
         return;
     }    
 
@@ -51,56 +51,19 @@ app.get('/api/chatbot', (req, res) => {
 
 // API endpoint to handle file analyzing WITHOUT SAVING THE FILE LOCALLY
 app.post('/api/analyze', upload.single('file'), (req, res) => {
-    const file = req.file;
-  
+    const file = req.file;    
+
     if (!file) {
       console.error('no upload');
-      return res.status(400).json({'error': 'No file uploaded'});
+      return res.status(400).json({error: 'No file uploaded'});
     }
-    
-    // Forward the file to another API, don't implement yet
 
-    res.json({ message: 'File forwarded successfully' });
+    analyzeFile(file).then(response => {
+        res.send(response);
+    });
 });
 
 // Listen from incoming requests from frontend
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}...`);
 });
-
-/*
-        try {
-            // Create a formData object in order to send the file
-            const formData = new FormData();
-            formData.append('file', file);
-
-            // Send the file to the sandbox
-            const response = await axios.post(
-                'https://www.virustotal.com/api/v3/files',
-                formData, // Send the file
-                {
-                headers: {
-                    'x-apikey': VirusTotalAPIKey,
-                    'Content-Type': 'multipart/form-data',
-                },
-                }
-            );
-
-            const reportURL = response.data.data.links.self;
-
-            // Get report results (in a JSON format)
-            const analysisResponse = await axios.get(
-                reportURL,
-                {
-                headers: {
-                    'x-apikey': VirusTotalAPIKey,
-                },
-                }
-            );
-            setResults(analysisResponse.data);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-*/
