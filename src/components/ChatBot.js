@@ -44,7 +44,8 @@ export const ChatBot = () => {
 
   const handleMsgInput = () => {
     if (!messageInput) return; // Skip if empty
-
+    
+    const chat = document.querySelector('.chat');
     // Store user message
     messagesAppend('user', messageInput);
 
@@ -58,10 +59,9 @@ export const ChatBot = () => {
     handleInputChange(''); // To reset send button
 
     // Scroll to bottom after a slight delay, to allow for messages to re-render first
-    const chat = document.querySelector('.chat');
     setTimeout(() => {
-      chat.scrollTop = chat.scrollHeight;
-    }, 20); // 20ms
+      chat.scrollTop = 2 * chat.scrollHeight;
+    }, 70); // 70ms
   };
 
   return (

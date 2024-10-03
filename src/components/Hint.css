@@ -5,7 +5,7 @@
 
 #icon {
     margin-left: 0.2vw;
-    color: #444444;
+    color: #666666;
     text-align: center;
     font-size: calc(9px + 1.5vmin);
     vertical-align: -0.5vmin; /* Fix a slight annoying misalignment*/
@@ -17,7 +17,7 @@
     padding: 0.5vh 0.8vw;
     opacity: 0;
     pointer-events: none; /*Hovering over it triggers it to display*/
-    background: #444444CC;
+    background: #666666CC;
     color: #D2D2D2;
     text-align: center;
     font-size: calc(9px + 0.5vmin);

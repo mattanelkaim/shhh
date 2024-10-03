@@ -56,7 +56,7 @@ function App() {
               <tr key={item.id} onClick={() => handleRowClick(item.id)}>
                 <td>{item.name}</td>
                 <td dangerouslySetInnerHTML={{__html: sanitize(expandedRows[item.id] ? item.description : shorten(item.description))}}></td>
-                <td dangerouslySetInnerHTML={{__html: sanitize(expandedRows[item.id] ? item.detection : shorten(item.detection))}}></td>
+                <td dangerouslySetInnerHTML={{__html: sanitize(expandedRows[item.id] ? fillNA(item.detection) : shorten(item.detection))}}></td>
                 <td>{item.platforms}</td>
                 <td>{item.phase_name}</td>
                 <td>{item.id}</td>
@@ -68,6 +68,10 @@ function App() {
       </header>
     </div>
   );
+}
+
+function fillNA(desc) {
+  return (desc.length !== 0) ? desc : 'N/A';
 }
 
 function shorten(desc) {
