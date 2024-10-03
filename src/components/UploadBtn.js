@@ -17,13 +17,12 @@ export const UploadBtn = () => {
         try {
             const formData = new FormData();
             formData.append('file', file);
-            console.log(formData);
         
             const response = await axios.post('http://localhost:3001/api/analyze', formData, {
                 headers: {
                   'Content-Type': 'multipart/form-data', // No longer needed in frontend
                 },
-              });
+            });
         
             // Handle response from the backend
             console.log(response.data);
@@ -37,14 +36,13 @@ export const UploadBtn = () => {
 
     return (
         <div className="upload">
-            {/* Looks like the icon is the input */}
             <input
               type="file"
               id="file-input"
               onChange={handleFileChange}
               disabled={loading}
             />
-            <label htmlFor="file-input">
+            <label htmlFor="file-input"> {/* Looks like the icon is the input */}
                 <FaFileUpload
                   id="upload-btn"
                   title={`${(loading ? 'Wait for analyze to complete...' : 'Analyze file in sandbox')}`}
