@@ -4,7 +4,6 @@ import DOMPurify from 'dompurify'; // Sanitize HTML tags
 import { SearchBar } from './components/SearchBar.js';
 import { ChatBot } from './components/ChatBot.js';
 import { Hint } from './components/Hint.js';
-import { VirusTotalAnalyzer } from './components/chatBotSandbox.js'
 
 function App() {
   const [data, setData] = useState([]);
@@ -42,7 +41,6 @@ function App() {
     <div className="App">
       <header className="App-header">
         <SearchBar data={data} setResults={setResults}/>
-        <VirusTotalAnalyzer/>
         <table className="attacks-data">
           <thead id="theadd">
             <tr>
