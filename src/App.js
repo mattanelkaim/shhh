@@ -32,9 +32,8 @@ function App() {
   const handleRowClick = (id) => {
     setExpandedRows((prevExpandedRows) => ({
       ...prevExpandedRows,
-      [id]: !prevExpandedRows[id], // Toggle expanded state for clicked row
+      [id]: !prevExpandedRows[id] // Toggle expanded state for clicked row
     }));
-    console.log(expandedRows)
   };
   
   return (

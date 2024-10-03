@@ -1,7 +1,7 @@
 import axios from 'axios';
 import FormData from 'form-data'; // To allow constructor with 3 arguments
 
-const VirusTotalAPIKey = '';
+const VirusTotalAPIKey = 'a6fd7bee54f3e55c8b89cf6fbf8d3e5fe5eb1d2076c1ac5169a79d246dfb67a3';
 
 const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'so', 'yet', 'in',
     'of', 'to', 'into', 'on', 'at', 'by', 'up', 'down', 'out', 'off', 'over',
@@ -226,9 +226,9 @@ export async function analyzeFile(file) {
 
         // possible stats: 'malicious', 'suspicious', 'undetected', 'harmless', 'timeout', 'confirmed-timeout', 'failure', 'type-unsupported'
         if (stats['malicious'] + stats['suspicious'] > 0) {
-            return 'VirusTotal has flagged this file as <b>malicious</b>!';
+            return {response: 'VirusTotal has flagged this file as <b>malicious</b>!'};
         } else {
-            return 'This file <b>does not</b> seem to be malicious, according to VirusTotal.';
+            return {response: 'This file <b>does not</b> seem to be malicious, according to VirusTotal.'};
         }
     } catch (error) {
         // Try to print a detailed error from Axios, if defined
