@@ -1,7 +1,7 @@
 .App {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow: visible !important;
 }
 
 .App-header {
@@ -16,9 +16,13 @@
   color: rgb(210, 210, 210);
 }
 
+.scroll-container {
+  margin-top: 2rem;
+  overflow: visible !important;
+}
+
 .attacks-data {
-  width: 96vw;
-  margin: 2rem 2vw 0;
+  width: 94vw;
   background: linear-gradient(to right, #040404A0, #111111A0);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
@@ -33,12 +37,21 @@
   backdrop-filter: blur(0);
   border-bottom: 1px solid rgba(0, 0, 0, 0.5);
   text-transform: uppercase;
+  transition: border-bottom 0.3s ease-out;
 }
 
-/* .attacks-data thead {
+.attacks-data th.sticky-th {
+  border-bottom: 3px solid #666666CC;
+}
+
+.attacks-data thead {
   position: sticky;
   top: -1px;
-} */
+}
+
+.attacks-data thead.sticky-header {
+  background: #1B1B1B;
+}
 
 .attacks-data td {
   padding: 10px 15px;

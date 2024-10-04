@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import DOMPurify from 'dompurify'; // Sanitize HTML tags
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { SearchBar } from './components/SearchBar.js';
@@ -28,8 +28,25 @@ function App() {
     fetchData(); // Then call the lambda
   }, []);
 
-  const [expandedRows, setExpandedRows] = useState({}); // Object to store expanded row indices
+  // Handle thead stickiness
+  const [isSticky, setIsSticky] = useState(false);
+  const stickyRef = useRef(null);
 
+  const handleScroll = () => {
+    const stickyElement = stickyRef.current;
+    if (stickyElement) {
+      setIsSticky(stickyElement.offsetTop > 0);
+
+      const thElements = document.querySelectorAll('table th');
+      thElements.forEach(th => {
+        th.classList.toggle('sticky-th', isSticky);
+      });
+    }
+  };
+  window.addEventListener('scroll', handleScroll);
+
+  // Handle expanding/collapsing rows
+  const [expandedRows, setExpandedRows] = useState({});
   const handleRowClick = (id) => {
     setExpandedRows((prevExpandedRows) => ({
       ...prevExpandedRows,
@@ -41,9 +58,9 @@ function App() {
     <div className="App">
       <header className="App-header">
         <SearchBar data={data} setResults={setResults}/>
-        <InfiniteScroll dataLength={results.length} id="scroll-container">
+        <InfiniteScroll className="scroll-container" dataLength={results.length}>
           <table className="attacks-data">
-            <thead id="theadd">
+            <thead ref={stickyRef} className={`${isSticky ? 'sticky-header' : ''}`}>
               <tr>
                 <th className="name">Name</th>
                 <th className="desc">Description<Hint/></th>
