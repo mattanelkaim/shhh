@@ -1,7 +1,6 @@
 .App {
   margin: 0;
   padding: 0;
-  overflow: visible !important;
 }
 
 .App-header {
@@ -13,12 +12,12 @@
   align-items: center;
   justify-content: center;
   font-size: calc(9px + 1vmin);
-  color: rgb(210, 210, 210);
+  color: #D2D2D2;
 }
 
 .scroll-container {
   margin-top: 2rem;
-  overflow: visible !important;
+  overflow: visible !important; /* Must override internal design */
 }
 
 .attacks-data {

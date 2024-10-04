@@ -1,4 +1,5 @@
 import './SearchBar.css'
+import React from 'react';
 import { FaSearch } from 'react-icons/fa';
 
 function filterData(data, query) {
@@ -17,7 +18,7 @@ export const SearchBar = ({data, setResults}) => {
       <input
         type="text"
         placeholder="Search descriptions..."
-        // Refresh results on each input change, using a filter function
+        // Refresh results on each input change using a filter function
         onChange={(e) => setResults(filterData(data, e.target.value))}
       />
     </div>

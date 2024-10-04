@@ -8,7 +8,6 @@ export const UploadBtn = ({messagesAppend}) => {
 
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
-        
         if (!file)
             return;
         
@@ -26,12 +25,11 @@ export const UploadBtn = ({messagesAppend}) => {
             });
         
             // Handle response from the backend
-            console.log(response)
             messagesAppend('bot', response.data.response);
         } catch (error) {
             // Handle errors
             console.error(error);
-            messagesAppend('bot', 'Error with server communication... Tough luck.');
+            messagesAppend('bot', 'Error with server communication... Tough luck :(');
         } finally {
             setLoading(false);
         }
