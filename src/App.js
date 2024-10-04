@@ -31,9 +31,11 @@ function App() {
   // Handle thead stickiness
   const [isSticky, setIsSticky] = useState(false);
   const stickyThead = document.querySelector('.attacks-data thead');
+  const [hintPos, setHintPos] = useState('above');
 
   const handleScroll = () => {
     if (stickyThead) {
+      // Sticky thead stuff
       setIsSticky(stickyThead.offsetTop > 0);
 
       // Apply sticky class for th elements if needed
@@ -41,6 +43,29 @@ function App() {
       thElements.forEach(th => {
         th.classList.toggle('sticky-th', isSticky);
       });
+
+      // Toggle hint position if needed
+      const tooltip = document.querySelector('.tooltip');
+      if (tooltip) {
+        const y = tooltip.getBoundingClientRect().top;
+        const height = tooltip.offsetHeight;
+        console.log('y = ' + y);
+        // console.log('height = ' + height);
+
+        if (hintPos === 'above') {
+          if (y <= 0) { // || Math.abs(y) < height
+            setTimeout(() => {
+              setHintPos('below');
+            }, 70); // With a delay so it won't flicker
+          }
+        } else {
+          if (!isSticky && Math.abs(y) >= height) {
+            setTimeout(() => {
+              setHintPos('above');
+            }, 70); // With a delay so it won't flicker
+          }
+        }
+      }
     }
   };
   window.addEventListener('scroll', handleScroll);
@@ -64,8 +89,8 @@ function App() {
             <thead className={`${isSticky ? 'sticky-header' : ''}`}>
               <tr>
                 <th className="name">Name</th>
-                <th className="desc">Description<Hint/></th>
-                <th className="detection">Detection<Hint/></th>
+                <th className="desc">Description<Hint position={hintPos}/></th>
+                <th className="detection">Detection<Hint position={hintPos}/></th>
                 <th className="platforms">Platforms</th>
                 <th className="phase">Phase</th>
                 <th className="id">Unique ID</th>

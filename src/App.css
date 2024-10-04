@@ -34,7 +34,7 @@
 .attacks-data th {
   padding: 10px;
   backdrop-filter: blur(0);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 3px solid transparent;
   text-transform: uppercase;
   transition: border-bottom 0.3s ease-out;
 }

@@ -25,11 +25,20 @@
     
     position: absolute;
     z-index: 2;
-    bottom: 100%;
     left: 50%;
-    transform: translate(-50%, -0.2vh);
+    /* Also applying .above/.below */
 
     transition: opacity 0.15s ease-out;
+}
+
+.tooltip.above {
+    bottom: 100%;
+    transform: translate(-50%, -0.2vh);
+}
+
+.tooltip.below {
+    top: 100%;
+    transform: translate(-50%, +0.3vh);
 }
 
 .hint-wrapper:hover .tooltip {
