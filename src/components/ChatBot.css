@@ -1,4 +1,4 @@
-/* All positional values are in vh, to stay as static as possible when zooming in & out*/
+/* All positional values are in vh to stay as static as possible when zooming in & out*/
 .bot-container {
     width: 9vh;
     height: 9vh;
@@ -8,24 +8,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     background: linear-gradient(135deg, #000000CC, #202020CC);
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
+    box-shadow: 0 0 3vh 0 rgba(0, 0, 0, 0.8);
+    transition: box-shadow 0.2s ease-out, width 0.4s ease-out, height 0.4s ease-out;
+
     border: 0.5vh solid #101010CC;
     border-radius: 3vh;
     border-top-left-radius: 0; /* Gives a drop effect */
-    box-shadow: 0 0 3vh 0 rgba(0, 0, 0, 0.8);
-    transition: box-shadow 0.2s ease-out, width 0.4s ease-out, height 0.4s ease-out;
 }
 
-/* Enlarge the shadow spread radious on hover*/
+/* Enlarge the shadow spread radius on hover*/
 .bot-container:hover {
     box-shadow: 0 0 3vh 0.6vh rgba(0, 0, 0, 0.8);
 }
 
 /* Toggle class onClick */
 .bot-container.maximized {
-    width: 60vh;
+    width: 55vh;
     height: 80vh;
     background: linear-gradient(135deg, #000000DD, #202020DD);
     display: block;
@@ -33,7 +35,7 @@
 
 .bot-container #robot-icon {
     font-size: 5vh;
-    color: #DDDDDD;
+    color: #DDD;
     opacity: 1;
     transition: opacity 0.2s ease-in-out;
 }
@@ -68,7 +70,7 @@
 
 .bot-container .chat-container .chat {
     width: 100%;
-    padding: 2vh 6vh 2vh 8.5vh;
+    padding: 2vh 5vh;
     flex-grow: 1; /* Take the rest of the height in .chat-container */
     overflow-y: auto; /* To show scrollbar only when needed */
     scroll-behavior: smooth;
@@ -108,7 +110,6 @@
 .bot-container .chat-container .chat .message code {
     background: #1A1A1A;
     font-weight: 600;
-    /* cursor: pointer; */
 }
 
 /* Save space to fit better in message box */
@@ -126,13 +127,13 @@
     background: #4db8dc;
     color: #080808;
     float: right;
-    border-top-right-radius: 0.3vh;
+    border-top-right-radius: 0.3vh; /* Gives a drop effect */
 }
 
 .bot-container .chat-container .chat .bot-message {
     background: #222729;
     float: left;
-    border-top-left-radius: 0.3vh;
+    border-top-left-radius: 0.3vh; /* Gives a drop effect */
 }
 
 .bot-container .chat-container .input-container {
@@ -153,7 +154,7 @@
     margin: 0;
     padding: 1.5vh;
     font-size: 2vh;
-    color: #CCCCCC;
+    color: #CCC;
     background: none;
     border: none;
 }

@@ -4,7 +4,7 @@
 }
 
 .upload #file-input {
-    display: none;
+    display: none; /* #upload-btn replaces it */
 }
 
 .upload #upload-btn {

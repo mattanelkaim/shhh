@@ -1,5 +1,5 @@
 .search-bar-container {
-    width: 30rem;
+    width: min(30rem, 70vw);
     height: 2rem;
     padding: 10px 20px;
     background: linear-gradient(to right, #00000088, #11111177);

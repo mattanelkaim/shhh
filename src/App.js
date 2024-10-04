@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify'; // Sanitize HTML tags
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { SearchBar } from './components/SearchBar.js';
@@ -30,14 +30,14 @@ function App() {
 
   // Handle thead stickiness
   const [isSticky, setIsSticky] = useState(false);
-  const stickyRef = useRef(null);
+  const stickyThead = document.querySelector('.attacks-data thead');
 
   const handleScroll = () => {
-    const stickyElement = stickyRef.current;
-    if (stickyElement) {
-      setIsSticky(stickyElement.offsetTop > 0);
+    if (stickyThead) {
+      setIsSticky(stickyThead.offsetTop > 0);
 
-      const thElements = document.querySelectorAll('table th');
+      // Apply sticky class for th elements if needed
+      const thElements = stickyThead.querySelectorAll('th');
       thElements.forEach(th => {
         th.classList.toggle('sticky-th', isSticky);
       });
@@ -48,9 +48,9 @@ function App() {
   // Handle expanding/collapsing rows
   const [expandedRows, setExpandedRows] = useState({});
   const handleRowClick = (id) => {
+    // Append to expandedRows (or update value if exists)
     setExpandedRows((prevExpandedRows) => ({
-      ...prevExpandedRows,
-      [id]: !prevExpandedRows[id] // Toggle expanded state for clicked row
+      ...prevExpandedRows, [id]: !prevExpandedRows[id] // Toggle expanded state for clicked row
     }));
   };
   
@@ -58,9 +58,10 @@ function App() {
     <div className="App">
       <header className="App-header">
         <SearchBar data={data} setResults={setResults}/>
+        { /* Using InfiniteScroll for lazy loading */ }
         <InfiniteScroll className="scroll-container" dataLength={results.length}>
           <table className="attacks-data">
-            <thead ref={stickyRef} className={`${isSticky ? 'sticky-header' : ''}`}>
+            <thead className={`${isSticky ? 'sticky-header' : ''}`}>
               <tr>
                 <th className="name">Name</th>
                 <th className="desc">Description<Hint/></th>
@@ -74,8 +75,12 @@ function App() {
               {results.map((item) => ( // Will replicate template for each element
                 <tr key={item.id} onClick={() => handleRowClick(item.id)}>
                   <td>{item.name}</td>
-                  <td dangerouslySetInnerHTML={{__html: sanitize(expandedRows[item.id] ? item.description : shorten(item.description))}}></td>
-                  <td dangerouslySetInnerHTML={{__html: sanitize(expandedRows[item.id] ? fillNA(item.detection) : shorten(item.detection))}}></td>
+                  <td dangerouslySetInnerHTML={{__html: sanitize(
+                    expandedRows[item.id] ? item.description : shorten(item.description)
+                  )}}></td>
+                  <td dangerouslySetInnerHTML={{__html: sanitize(
+                    expandedRows[item.id] ? (item.detection || 'N/A') : shorten(item.detection) // Replaces with N/A if empty
+                  )}}></td>
                   <td>{item.platforms}</td>
                   <td>{item.phase_name}</td>
                   <td>{item.id}</td>
@@ -90,25 +95,20 @@ function App() {
   );
 }
 
-function fillNA(desc) {
-  return (desc.length !== 0) ? desc : 'N/A';
-}
-
-function shorten(desc) {
+function shorten(text) {
   // Handle edge-case
-  if (desc.length === 0)
+  if (text.length === 0)
     return 'N/A';
 
   // Set a maximum length for content
-  desc = desc.slice(0, 200);
+  text = text.slice(0, 200);
 
   // Make sure not to cut in the middle of a word
-  const position = desc.lastIndexOf(' ');
-  
-  return desc.slice(0, position) + '...';
+  const position = text.lastIndexOf(' ');
+  return text.slice(0, position) + '...';
 }
 
-// Process the HTML tags in the recieved raw data
+// Remove unwanted HTML tags to safely put in dangerouslySetInnerHTML
 function sanitize(html) {
   return DOMPurify.sanitize(html, {ALLOWED_TAGS: ['br', 'code']});
 }
