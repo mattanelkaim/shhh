@@ -20,7 +20,7 @@ export const UploadBtn = ({messagesAppend}) => {
         
             const response = await axios.post('http://localhost:3001/api/analyze', formData, {
                 headers: {
-                  'Content-Type': 'multipart/form-data', // No longer needed in frontend
+                  'Content-Type': 'multipart/form-data',
                 },
             });
         

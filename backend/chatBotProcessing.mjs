@@ -4,7 +4,7 @@ import FormData from 'form-data'; // To allow constructor with 3 arguments
 const VirusTotalAPIKey = 'a6fd7bee54f3e55c8b89cf6fbf8d3e5fe5eb1d2076c1ac5169a79d246dfb67a3';
 
 const wordsToOmit = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'so', 'yet', 'in',
-    'of', 'to', 'into', 'on', 'at', 'by', 'up', 'down', 'out', 'off', 'over',
+    'of', 'to', 'into', 'on', 'at', 'by', 'up', 'down', 'out', 'off', 'over', 'this', 'that',
     'under', 'again', 'further', 'then', 'once', 'i', 'me', 'my', 'mine', 'we', 'us', 'our',
     'ours', 'you', 'your', 'yours', 'he', 'him', 'his', 'she', 'her', 'hers', 'it', 'its',
     'they', 'them', 'their', 'theirs', 'what', 'which', 'who', 'whom', 'whose', 'be', 'am',
@@ -58,8 +58,9 @@ export async function processQuery(query, db) {
         query = query.replace(/^analyze /, ''); // Remove only first match
         return {response: await analyzeAttacksDB(query, db)};
     }
-    if (query.match('^check\\s+md5\\s+([a-fA-F0-9]{32})$'))
-        return {response: await analyzeMD5Signature(md5Match[1])};
+    const md5Match = query.match('^check\\s+md5\\s+([a-fA-F0-9]{32})$');
+    if (md5Match)
+        return {response: await analyzeMD5Signature(md5Match[1])};        
     
     return {response: "I'm not sure I understand. Type <code>help</code> to see the supported commands."};
 }

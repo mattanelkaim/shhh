@@ -17,7 +17,7 @@
     padding: 0.5vh 0.8vw;
     opacity: 0;
     pointer-events: none; /* Hovering over it triggers it to display */
-    background: #666666CC;
+    background: #666;
     color: #D2D2D2;
     text-align: center;
     font-size: calc(9px + 0.5vmin);

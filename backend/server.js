@@ -35,7 +35,7 @@ app.get('/api/data', (req, res) => {
     });
 });
 
-// API endpoint to handle database operations
+// API endpoint to handle chatbot operations
 app.get('/api/chatbot', (req, res) => {
     const {query} = req.query; // {} is crucial
 
