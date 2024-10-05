@@ -20,8 +20,8 @@ export const ChatBot = () => {
   };
 
   /* Messages handling */
-  const initialMsg = `Hi there, I'm NinjaBot👋<br/>You can ask me questions about the displayed data, or even validate MD5 signatures.
-                      Type <code>help</code> to learn more.<br/>I'll do my best to help you!`;
+  const initialMsg = `Hi there, I'm NinjaBot👋<br/>You can ask me questions about the displayed data, validate MD5 signatures
+                      or even upload files to analyze using the button below.<br/>Type <code>help</code> to learn more.<br/>I'll do my best to assist you!`;
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([['bot', initialMsg]]); // List of [{bot/user}, {message}]
 
