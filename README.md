@@ -1,4 +1,4 @@
-# Rafarl's Ninjas project
+# Ninjas project
 
 ## To run the project
 In the project directory, you can run:
