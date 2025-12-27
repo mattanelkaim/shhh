@@ -19,4 +19,4 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 ![image](https://github.com/user-attachments/assets/69e19aa2-0d5b-4110-8914-6e9834742d77)
 
 ## Chatbot
-![image](https://github.com/user-attachments/assets/6538f792-97e3-4f88-9bd9-f41ed57d7f2d)
+![image](https://github.com/user-attachments/assets/32e92de5-8a7f-482b-9ec6-2ee8c38bd212)
